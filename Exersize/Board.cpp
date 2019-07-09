@@ -14,8 +14,6 @@ enum BoardFigure
 
 int main()
 {
-
-    //Массив шахматной доски
     BoardFigure Board [8][8] = {Empty};
 
     Board[0][0] = Rook;
