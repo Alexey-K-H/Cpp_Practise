@@ -1,7 +1,7 @@
 #include <iostream>
 
 using namespace std;
-
+//Заполнить два массива в обратном порядке
 void Fullfill_array(int curr_array[], int array_size, int number_of_array)
 {
     for(int i = array_size - 1; i >= 0; i--)
