@@ -1,7 +1,7 @@
 #include <iostream>
 
 using namespace std;
-//Наличие цвета в радуге с помощбю перечисления
+//Наличие цвета в радуге с помощью перечисления и оператора switch-case
 
 void Check_for_right_color(int number_color)
 {
