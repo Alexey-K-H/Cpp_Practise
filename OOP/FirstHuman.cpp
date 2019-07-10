@@ -32,5 +32,7 @@ int main() {
     firstMan.IntroduseSelf();
     firstWoman->IntroduseSelf();
 
+    delete(firstWoman);
+    
     return 0;
 }
