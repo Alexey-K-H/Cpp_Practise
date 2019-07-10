@@ -1,7 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-
+//Сортировка массива в порядке убывания
 //Лямбда функции
 //Стандартные алгоритмы
 
