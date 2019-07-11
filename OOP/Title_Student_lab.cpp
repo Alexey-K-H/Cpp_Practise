@@ -8,7 +8,7 @@
    * Выполнил(а): ст. гр. ЗИ-123  *
    * Иванов Андрей Петрович       *
    ********************************
-   Необходимо, чтобы программа сама определяла нужную длину рамки. 
+   Необходимо, чтобы программа сама определяла нужную длину рамки.
    Сама же длина рамки зависит от длины наибольшей строки внутри рамки.
  */
 using namespace std;
@@ -70,10 +70,10 @@ public:
 
     int Find_max(int num_1, int num_2, int num_3){
         int max = num_1;
-        if(max > num_2){
+        if(max < num_2){
             max = num_2;
         }
-        else if(max > num_3){
+        else if(max < num_3){
             max = num_3;
         }
         return max;
@@ -90,7 +90,6 @@ public:
         int str_1_length = str_1.length();
         int str_2_length = str_2.length();
         int str_3_length = str_3.length();
-
         max_length = Find_max(str_1_length, str_2_length, str_3_length);
 
         for(int i = 0; i < 9; i++)
@@ -99,60 +98,75 @@ public:
             {
                 for(int j = 0; j < max_length + 4; j++)
                 {
-                    cout << "* ";
+                    cout << "*";
                 }
-                //cout << endl;
+                cout << endl;
             }
-
+            else
             if(i == 2)
             {
                 cout << "* ";
                 cout << str_1;
-                for(int j = 0; j < max_length + 4; j++)
+                for(int j = 0; j < (max_length + 4 - str_1_length); j++)
                 {
-                    if(j == (max_length - 3)){
+                    if(j == (max_length - str_1_length)){
                         cout << " *";
                     }
+                    cout << " ";
                 }
+                cout << endl;
             }
-
+            else
             if(i == 4)
             {
                 cout << "* ";
                 cout << str_2;
-                for(int j = 0; j < max_length + 4; j++)
+                for(int j = 0; j < (max_length + 4 - str_2_length); j++)
                 {
-                    if(j == (max_length - 3)){
+                    if(j == (max_length - str_2_length)){
                         cout << " *";
                     }
+                    cout << " ";
                 }
+                cout << endl;
             }
-
+            else
             if(i == 6)
             {
                 cout << "* ";
                 cout << str_3;
-                for(int j = 0; j < max_length + 4; j++)
+                for(int j = 0; j < (max_length + 4 - str_3_length); j++)
                 {
-                    if(j == (max_length - 3)){
+                    if(j == (max_length - str_3_length)){
                         cout << " *";
                     }
+                    cout << " ";
                 }
+                cout << endl;
             }
-
+            else
             if(i == 8)
             {
                 for(int j = 0; j < max_length + 4; j++)
                 {
-                    cout << "* ";
+                    cout << "*";
                 }
             }
+            else{
+                for(int j = 0; j < max_length + 4; j++)
+                {
+                    if(j == 0)
+                        cout << "*";
+                    if(j == (max_length + 2))
+                        cout << "*";
+                    cout << " ";
+                }
+                cout << endl;
+            }
 
-            cout << endl;
         }
     }
 };
-
 
 int main()
 {
@@ -181,6 +195,6 @@ int main()
     New_Title -> Set_number_of_lab(number_LabWork);
 
     New_Title -> Give_information_about_lab();
-
+    delete(New_Title);
     return 0;
 }
