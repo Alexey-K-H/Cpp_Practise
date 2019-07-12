@@ -27,9 +27,15 @@ public:
     void Set_Cordinates_of_the_Vector(){
         int index_coord = 0;
         while(metrik > 0){
-            cout << "Print the " << index_coord << " coordinate of the vector: ";
-            double curr_coordinate = 0;
-            cin >> curr_coordinate;
+            cout << "Print the " << index_coord << " coordinate of begining of the vector: ";
+            double curr_begin = 0;
+            cin >> curr_begin;
+
+            cout << "Print the " << index_coord << " coordinate of the end of the vector: ";
+            double curr_end = 0;
+            cin >> curr_end;
+
+            double curr_coordinate = (curr_end - curr_begin);
             corDinate.push_back(pow(curr_coordinate, 2));
             metrik--;
             index_coord++;
