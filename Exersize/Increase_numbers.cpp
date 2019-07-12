@@ -22,6 +22,8 @@ void Increase_if_need(int number_1, int number_2, int number_3){
         cout << "Second number: " << number_2 << endl;
         cout << "Third number: " << number_3 << endl;
     }
+    else
+        cout << "There are no the same numbers" << endl;
 }
 
 int main()
