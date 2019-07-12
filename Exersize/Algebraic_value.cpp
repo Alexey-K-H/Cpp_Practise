@@ -9,13 +9,14 @@ using namespace std;
 
 float Create_curr_X(float z, float b, float a, float betta){
     float curr_x  = 0;
-    curr_x = pow(z,3) - b + pow(a,2)/tan(2*(betta));
+    curr_x = pow(z,3) - b + pow(a,2)/pow(tan(betta),2);
     return curr_x;
 }
 
 void FullFill_vector(vector<float>& sum_nums, int count){
+    int index = 1;
     while(count > 0){
-        cout << "Enter the values for X:" << endl;
+        cout << "Enter the values for X" << index << ":" << endl;
         cout << "Enter the Z value: ";
         float z = 0;
         cin >> z;
@@ -28,7 +29,7 @@ void FullFill_vector(vector<float>& sum_nums, int count){
         cout << "Enter Betta value: ";
         float betta = 0;
         cin >> betta;
-
+        index++;
         sum_nums.push_back(Create_curr_X(z, b, a, betta));
         count--;
     }
