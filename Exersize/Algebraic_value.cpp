@@ -1,15 +1,15 @@
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <vector>
 
-//Найти Y, если Y = X1 + X2 + … + Xn,   X = Z^3 - B + A^2 / tg^2?. 
-//Количество X вводятся пользователем программы. 
+//Найти Y, если Y = X1 + X2 + … + Xn,   X = Z^3 - B + A^2 / tg^2?.
+//Количество X вводятся пользователем программы.
 //Для каждого X значения Z, B, А, ? разные (вводятся пользователем программы).
 using namespace std;
 
-float Create_curr_X(float z, float b, float z, float betta){
+float Create_curr_X(float z, float b, float a, float betta){
     float curr_x  = 0;
-    curr_x = pow(z,3) - b + pow(a,2)/tg(2*(betta));
+    curr_x = pow(z,3) - b + pow(a,2)/tan(2*(betta));
     return curr_x;
 }
 
@@ -25,22 +25,24 @@ void FullFill_vector(vector<float>& sum_nums, int count){
         cout << "Enter the A value: ";
         float a = 0;
         cin >> a;
-        cout << "Enter Betta valur: ";
+        cout << "Enter Betta value: ";
         float betta = 0;
         cin >> betta;
-        
+
         sum_nums.push_back(Create_curr_X(z, b, a, betta));
+        count--;
     }
 }
 
-float Sum(vector<float> sum_nums, int count){
+void Sum(vector<float> sum_nums, int count){
     float result = 0;
     int index = 0;
     while(count > 0){
         result += sum_nums[index];
         index++;
-        cout--;
+        count--;
     }
+    cout << "Result is: " << result << endl;
 }
 
 int main()
@@ -48,7 +50,7 @@ int main()
     cout << "Enter the number of the X:";
     int count = 0;
     cin >> count;
-    
+
     vector<float> sumary_num;
     FullFill_vector(sumary_num, count);
     Sum(sumary_num, count);
