@@ -64,5 +64,6 @@ int main()
     user_Vector->Set_Metrik_of_the_vector(metrika);
     user_Vector->Set_Cordinates_of_the_Vector();
     user_Vector->Give_the_length_of_the_vector();
+    delete(user_Vector);
     return 0;
 }
