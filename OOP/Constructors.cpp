@@ -40,6 +40,6 @@ int main() {
     firstWoman->SetAge(28);
 
     firstWoman->IntroduceSelf();
-
+    delete(firstWoman);
     return 0;
 }
