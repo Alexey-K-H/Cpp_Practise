@@ -21,7 +21,7 @@ void Fill_list(list<float>& user_list)
 void Display_list(list<float>& user_list)
 {
     cout << "User_list:";
-    for(auto element = user_list.cbegin(); element != user_list.end(); element++)
+    for(auto element = user_list.cbegin(); element != user_list.cend(); element++)
     {
         cout << *element << " ";
     }
