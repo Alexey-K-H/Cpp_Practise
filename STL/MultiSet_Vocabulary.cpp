@@ -4,7 +4,7 @@
 
 using namespace std;
 /*Написать приложение заполняющее словарь. Структура хранит слово и его значение*/
-
+/*Слово и значение вводит пользователь*/
 template <typename Type>
 void DisplayContents(const Type& container)
 {
