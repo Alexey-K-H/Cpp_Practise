@@ -73,7 +73,7 @@ struct ContactID_sort_phone
 };
 
 int main() {
-
+ //В зависимости от праметра поиска нужно выбирать соответствующий контейнер
     string finish = "yes";
     while(finish != "no")
     {
