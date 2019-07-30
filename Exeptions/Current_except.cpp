@@ -18,7 +18,7 @@ int main()
         cout << "Exception located: " << exp.what() << endl;
         cout << "End of the program" << endl;
     }
-    catch(...)
+    catch(...)//Общий блок исключений должен быть всегда последним
     {
         cout << "Sorry, exception located" << endl;
     }
