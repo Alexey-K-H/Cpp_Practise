@@ -1,7 +1,8 @@
 #include <iostream>
 using namespace std;
 /*Вычислить цепную дробь*/
-
+/*Пользователь задает точность дроби, вводя число знаков после запятой*/
+/*1+1/(1+....+1/(1+1))....) - цепная дробь*/
 float Chain_shot(int& user_value, float& result)
 {
     for(int i = 0; i < user_value; i++)
