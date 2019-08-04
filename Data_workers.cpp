@@ -1,5 +1,5 @@
 #include <iostream>
-#include <set>
+#include <vector>
 #include <string>
 #include <fstream>
 using namespace std;
@@ -23,28 +23,31 @@ struct ID_worker
             string& curr_post,
             int& curr_hour_pay,
             int& curr_hours_count
-            ):
-            ID(curr_id),
-            surname(curr_surname),
-            name(curr_name),
-            patronymic(curr_patronymic),
-            post(curr_post),
-            hour_pay(curr_hour_pay),
-            hours_count(curr_hours_count)
-            {}
+            )
+            {
+            ID = curr_id;
+            surname = curr_surname;
+            name = curr_name;
+            patronymic = curr_patronymic;
+            post = curr_post;
+            hour_pay = curr_hour_pay;
+            hours_count = curr_hours_count;
+            }
 };
 
 char Interface_menu();
-void Check_input(char& user_choice, set<ID_worker>& workers);
-void New_Worker(set<ID_worker>& worker);
+void Check_input(char& user_choice, vector<ID_worker> workers);
+void New_Worker(vector<ID_worker>& worker);
+void Search_worker(vector<ID_worker>& workers);
+void EditData(vector<ID_worker>& worker);
 
 int main()
 {
     fstream workers_file_data;
     workers_file_data.open("Data.txt", ios_base:: in | ios_base:: out | ios_base:: app);
-    set<ID_worker> set_workers;
+    vector<ID_worker> data_workers;
     char user_choice = Interface_menu();
-    Check_input(user_choice, set_workers);
+    Check_input(user_choice, data_workers);
     return 0;
 }
 
@@ -64,7 +67,7 @@ char Interface_menu(){
     return user_choice;
 }
 
-void Check_input(char& user_choice, set<ID_worker>& workers){
+void Check_input(char& user_choice, vector<ID_worker>& workers){
     user_choice = toupper(user_choice);
     switch (user_choice){
         case 'N':{
@@ -72,7 +75,7 @@ void Check_input(char& user_choice, set<ID_worker>& workers){
             break;
         }
         case 'E':{
-
+            EditData(workers);
             break;
         }
         case 'F':{
@@ -109,7 +112,7 @@ void Check_input(char& user_choice, set<ID_worker>& workers){
     }
 }
 
-void New_Worker(set<ID_worker>& worker){
+void New_Worker(vector<ID_worker>& worker){
     cout << "Enter data:" << endl;
     cout << "ID: ";
     int worker_ID = 0;
@@ -133,7 +136,7 @@ void New_Worker(set<ID_worker>& worker){
     int worker_Hours = 0;
     cin >> worker_Hours;
 
-    worker.insert(ID_worker(
+    worker.emplace_back(ID_worker(
             worker_ID,
             worker_Surname,
             worker_Name,
@@ -142,4 +145,19 @@ void New_Worker(set<ID_worker>& worker){
             worker_Hr_pay,
             worker_Hours
             ));
+}
+
+auto Search_worker(vector<ID_worker>& workers, int& search_ID){
+    for(int i = 0; i < workers.size(); i++){
+        if(workers.at(i).ID == search_ID)
+            return workers.at(i);
+    }
+}
+
+void EditData(vector<ID_worker>& worker){
+    cout << "Enter ID of worker:";
+    int search_ID = 0;
+    cin >> search_ID;
+    auto founded_worker = Search_worker(worker, search_ID);
+    
 }
