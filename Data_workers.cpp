@@ -4,11 +4,6 @@
 #include <fstream>
 using namespace std;
 
-/*Дописать передачу данных в файл,
-загрузку данных из файла,
-показать всех рабочих,
-отсортировать данные*/
-
 struct ID_worker
 {
     int ID;
@@ -46,12 +41,10 @@ int Search_worker(vector<ID_worker>& workers, string& search_Surname);
 void EditData(vector<ID_worker>& worker);
 void Display_current_worker(ID_worker& curr_Worker);
 void Delete_data(vector<ID_worker>& workers);
-
+void Save_data_to_file(vector<ID_worker>& workers);
 
 int main()
 {
-    fstream workers_file_data;
-    workers_file_data.open("Data.txt", ios_base:: in | ios_base:: out | ios_base:: app);
     vector<ID_worker> data_workers;
     Interface_menu();
     Check_input(data_workers);
@@ -101,7 +94,7 @@ void Check_input(vector<ID_worker>& workers){
                 break;
             }
             case 'S': {
-
+                Save_data_to_file(workers);
                 break;
             }
             case 'R': {
@@ -267,4 +260,19 @@ void Delete_data(vector<ID_worker>& workers){
         cout << "Worker didn't found!" << endl;
     else
         workers.erase(workers.begin() + founded_worker);
+}
+
+void Save_data_to_file(vector<ID_worker>& workers){
+    fstream workers_file_data;
+    workers_file_data.open("Data.txt", ios_base:: in | ios_base:: out | ios_base:: trunc);
+    for(int i = 0; i < workers.size(); i++){
+        workers_file_data << "ID: " << workers[i].ID;
+        workers_file_data << "Surname: " << workers[i].surname;
+        workers_file_data << "Name: " << workers[i].name;
+        workers_file_data << "Patronymic: " << workers[i].patronymic;
+        workers_file_data << "Post: " << workers[i].post;
+        workers_file_data << "H/pay: " << workers[i].hour_pay;
+        workers_file_data << "Salary: " << workers[i].hours_count;
+    }
+    workers_file_data.close();
 }
