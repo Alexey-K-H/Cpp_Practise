@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 using namespace std;
+/*In process...*/
 /*Дан массив размера n, заполнить его случайными числами, Найти все нечётные числа массива.*/
 
 struct ID_worker
