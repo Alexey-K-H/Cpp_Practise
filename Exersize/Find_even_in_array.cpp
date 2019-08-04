@@ -32,7 +32,7 @@ void Create_array(int& count_of_elements){
 void Find_even_elements(int *array, int& count_of_elements){
     cout << "Result: ";
     for(int i = 0; i < count_of_elements; i++){
-        if(array[i] % 2 == 0)
+        if(array[i] % 2 != 0)
             cout << array[i] << " ";
     }
     cout << endl;
