@@ -18,7 +18,7 @@ class Student_title
 private:
     string surName;
     string name;
-    string lastName;
+    string patronymic;
 
     string number_of_lab;
     string number_of_group;
@@ -27,7 +27,7 @@ public:
     Student_title(){
         surName = "Surname";
         name = "Name";
-        lastName = "Last_Name(if there is)";
+        patronymic = "Patronymic(if there is)";
 
         number_of_group = "Number of the group";
         number_of_lab = "Number of the lab_work";
@@ -37,7 +37,7 @@ public:
     {
         surName = stud_surName;
         name = stud_name;
-        lastName = stud_lastName;
+        patronymic = stud_lastName;
     }
 
     void Set_number_of_lab(string number)
