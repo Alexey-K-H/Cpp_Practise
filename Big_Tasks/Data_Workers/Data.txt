@@ -1,0 +1,6 @@
+<Worker data>
+          ID             Surname            Name                  Patronymic                    Post           H/pay         Hours count                  Salary
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+          25              Ivanov          Gordon                   Petrovich                  Master             650                  12                    7800
+          14             Tkachev          Kirill                  Andreevich                 Athlete             500                   3                    1500
+         689               Gomer           Artem                Grigorievich               Programer            1200                  24                   28800
