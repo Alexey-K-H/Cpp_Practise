@@ -43,6 +43,7 @@ void EditData(vector<ID_worker>& worker);
 void Display_current_worker(ID_worker& curr_Worker);
 void Delete_data(vector<ID_worker>& workers);
 void Save_data_to_file(vector<ID_worker>& workers);
+void Load_form_file(vector<ID_worker>& workers);
 
 int main()
 {
@@ -99,7 +100,7 @@ void Check_input(vector<ID_worker>& workers){
                 break;
             }
             case 'R': {
-
+                Load_form_file(workers);
                 break;
             }
             case 'V': {
@@ -275,7 +276,7 @@ void Delete_data(vector<ID_worker>& workers){
 void Save_data_to_file(vector<ID_worker>& workers){
     ofstream workers_file_data;
     workers_file_data.open("Data.txt", ios_base:: out | ios_base:: trunc);
-    if(!workers_file_data)
+    if(!workers_file_data.is_open())
         cout << "Cannot open the file!" << endl;
     else {
         for (int i = 0; i < workers.size(); i++) {
@@ -306,6 +307,45 @@ void Save_data_to_file(vector<ID_worker>& workers){
             workers_file_data <<  setw(20) << workers[i].hours_count;
             workers_file_data <<  setw(24) << workers[i].hour_pay * workers[i].hours_count;
         }
+        workers_file_data.close();
     }
-    workers_file_data.close();
+}
+
+void Load_form_file(vector<ID_worker>& workers){
+    ifstream new_File;
+    new_File.open("Doc_workers.txt", ios_base::out);
+    if(!new_File.is_open()){
+        cout << "Cannot open the file!" << endl;
+    }
+    else
+    {
+        int id_Load = 0;
+        string surname_Load;
+        string name_Load;
+        string patronymic_Load;
+        string post_Load;
+        int hour_pay_Load;
+        int hour_count_Load;
+        while (new_File.good())
+        {
+            new_File >> id_Load;
+            new_File >> surname_Load;
+            new_File >> name_Load;
+            new_File >> patronymic_Load;
+            new_File >> post_Load;
+            new_File >> hour_pay_Load;
+            new_File >> hour_count_Load;
+
+            workers.emplace_back(ID_worker(
+                    id_Load,
+                    surname_Load,
+                    name_Load,
+                    patronymic_Load,
+                    post_Load,
+                    hour_pay_Load,
+                    hour_count_Load
+            ));
+        }
+        new_File.close();
+    }
 }
