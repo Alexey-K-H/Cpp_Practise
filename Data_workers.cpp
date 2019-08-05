@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <iomanip>
 using namespace std;
 
 struct ID_worker
@@ -46,7 +47,6 @@ void Save_data_to_file(vector<ID_worker>& workers);
 int main()
 {
     vector<ID_worker> data_workers;
-    Interface_menu();
     Check_input(data_workers);
     return 0;
 }
@@ -67,6 +67,7 @@ void Interface_menu(){
 void Check_input(vector<ID_worker>& workers){
     char user_choice = 'U';//U - user_choice
     while (user_choice != 'Q') {
+        Interface_menu();
         cin >> user_choice;
         user_choice = toupper(user_choice);
         switch (user_choice) {
@@ -110,10 +111,12 @@ void Check_input(vector<ID_worker>& workers){
                 break;
             }
             default: {
+                if(user_choice != 'Q')
                 cout << "Error input!" << endl;
             }
         }
     }
+    cout << "End of the session. Goodbye!";
 }
 
 void New_Worker(vector<ID_worker>& worker){
@@ -149,6 +152,7 @@ void New_Worker(vector<ID_worker>& worker){
             worker_Hr_pay,
             worker_Hours
             ));
+    cout << endl;
 }
 
 int Search_worker(vector<ID_worker>& workers, string& search_Surname){
@@ -166,7 +170,8 @@ void Display_current_worker(ID_worker& curr_Worker){
     cout << "Patronymic: " << curr_Worker.patronymic << endl;
     cout << "Post: " << curr_Worker.post << endl;
     cout << "H/pay: " << curr_Worker.hour_pay << endl;
-    cout << "Salary: " << curr_Worker.hours_count << endl;
+    cout << "Hours count: " << curr_Worker.hours_count << endl;
+    cout << endl;
 }
 
 void EditData(vector<ID_worker>& worker){
@@ -175,13 +180,16 @@ void EditData(vector<ID_worker>& worker){
     cin >> curr_surname;
     int founded_worker = Search_worker(worker, curr_surname);
     if(founded_worker < 0)
+    {
         cout << "Worker didn't found!" << endl;
+        return;
+    }
     else
         Display_current_worker(worker[founded_worker]);
 
     char finish_change = 'n';
     while (finish_change != 'y'){
-        cout << "Choose the parameter to change: ";
+        cout << "Choose the parameter to change:" << endl;
         cout << "i - ID" << endl;
         cout << "s - surname" << endl;
         cout << "n - name" << endl;
@@ -189,6 +197,7 @@ void EditData(vector<ID_worker>& worker){
         cout << "j - post" << endl;
         cout << "h - hour/pay" << endl;
         cout << "c - count of hours" << endl;
+        cout << "f - cancel" << endl;
         char chosen_param;
         cin >> chosen_param;
         switch (chosen_param)
@@ -243,6 +252,7 @@ void EditData(vector<ID_worker>& worker){
                 break;
             }
             default:{
+                if(chosen_param != 'f')
                 cout << "Bad input" << endl;
             }
         }
@@ -252,7 +262,7 @@ void EditData(vector<ID_worker>& worker){
 }
 
 void Delete_data(vector<ID_worker>& workers){
-    cout << "Enter surname of worker:";
+    cout << "Enter surname of worker to delete:";
     string curr_surname;
     cin >> curr_surname;
     int founded_worker = Search_worker(workers, curr_surname);
@@ -263,16 +273,39 @@ void Delete_data(vector<ID_worker>& workers){
 }
 
 void Save_data_to_file(vector<ID_worker>& workers){
-    fstream workers_file_data;
-    workers_file_data.open("Data.txt", ios_base:: in | ios_base:: out | ios_base:: trunc);
-    for(int i = 0; i < workers.size(); i++){
-        workers_file_data << "ID: " << workers[i].ID;
-        workers_file_data << "Surname: " << workers[i].surname;
-        workers_file_data << "Name: " << workers[i].name;
-        workers_file_data << "Patronymic: " << workers[i].patronymic;
-        workers_file_data << "Post: " << workers[i].post;
-        workers_file_data << "H/pay: " << workers[i].hour_pay;
-        workers_file_data << "Salary: " << workers[i].hours_count;
+    ofstream workers_file_data;
+    workers_file_data.open("Data.txt", ios_base:: out | ios_base:: trunc);
+    if(!workers_file_data)
+        cout << "Cannot open the file!" << endl;
+    else {
+        for (int i = 0; i < workers.size(); i++) {
+            workers_file_data << "<Worker data>" << endl;
+            workers_file_data << setw(12) << "ID";
+            workers_file_data << setw(20) << "Surname";
+            workers_file_data << setw(16) << "Name";
+            workers_file_data << setw(28) << "Patronymic";
+            workers_file_data << setw(24) << "Post";
+            workers_file_data << setw(16) << "H/pay";
+            workers_file_data << setw(20) << "Hours count";
+            workers_file_data << setw(24) << "Salary";
+            workers_file_data << endl;
+
+            int line_count = 160;
+            while (line_count > 0){
+                workers_file_data << "-";
+                line_count--;
+            }
+            workers_file_data << endl;
+
+            workers_file_data <<  setw(12) << workers[i].ID;
+            workers_file_data <<  setw(20) << workers[i].surname;
+            workers_file_data <<  setw(16) << workers[i].name;
+            workers_file_data <<  setw(28) << workers[i].patronymic;
+            workers_file_data <<  setw(24) << workers[i].post;
+            workers_file_data <<  setw(16) << workers[i].hour_pay;
+            workers_file_data <<  setw(20) << workers[i].hours_count;
+            workers_file_data <<  setw(24) << workers[i].hour_pay * workers[i].hours_count;
+        }
     }
     workers_file_data.close();
 }
