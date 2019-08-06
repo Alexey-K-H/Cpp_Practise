@@ -4,16 +4,7 @@
 #include <fstream>
 #include <iomanip>
 using namespace std;
-/*Разработать программу, в которой будет организовано меню, выбор функций меню должно быть организовано по функциональной клавише. 
-Вся информация должна храниться в массиве структур, с возможностью их записи в файл. 
 
-функция для ввода данных пользователем;
-функция для записи данных в файл;
-чтение данных из файла;
-вывод данных на экран;
-дополнение данных;
-удаление данных;
-поиск информации по атрибуту;*/
 struct ID_worker
 {
     int ID;
@@ -307,7 +298,7 @@ void Save_data_to_file(vector<ID_worker>& workers){
         }
         workers_file_data << endl;
 
-        for (int i = 0; i < workers.size() - 1; i++) {
+        for (int i = 0; i < workers.size(); i++) {
             workers_file_data <<  setw(12) << workers[i].ID;
             workers_file_data <<  setw(20) << workers[i].surname;
             workers_file_data <<  setw(16) << workers[i].name;
@@ -380,7 +371,7 @@ void Show_all_workers(vector<ID_worker>& workers){
     }
     cout << endl;
 
-    for (int i = 0; i < workers.size() - 1; i++) {
+    for (int i = 0; i < workers.size(); i++) {
         cout <<  setw(12) << workers[i].ID;
         cout <<  setw(20) << workers[i].surname;
         cout <<  setw(16) << workers[i].name;
