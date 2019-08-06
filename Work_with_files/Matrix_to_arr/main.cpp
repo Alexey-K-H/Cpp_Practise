@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 #include "Array.h"
-
+/*Задана матрица А размерностью nxm. Записать все элементы матрицы в одномерный массив.*/
 int main()
 {
     cout << "Enter count of raws: ";
