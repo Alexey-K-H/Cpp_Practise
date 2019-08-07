@@ -6,7 +6,7 @@ using namespace std;
 void Display_array(int *array, int& count){
     cout << "<Array>" << endl;
     for(int cnt = 0; cnt < count; cnt++){
-        cout << array[cnt] << " ";
+        cout << "[" << array[cnt] << "] ";
     }
 }
 
@@ -29,8 +29,10 @@ void Display_matrix(int **array, int& raw_cnt, int& column_cnt){
     cout << "<Matrix>" << endl;
     for(int count_row = 0; count_row < raw_cnt; count_row++)
     {
+        cout << "|";
         for(int count_column = 0; count_column < column_cnt; count_column++)
             cout << setw(3) << array[count_row][count_column];
+        cout << "|";
         cout << endl;
     }
 }
@@ -52,3 +54,4 @@ void Create_matrix(int& raws_cnt, int& column_cnt)
     for(int count = 0; count < raws_cnt; count++)
         delete[](ptr_array[count]);
 }
+
