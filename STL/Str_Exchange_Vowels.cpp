@@ -5,10 +5,7 @@ using namespace std;
 
 void Exchange_symbols(string& user_str){
     srand(time(nullptr));
-    enum Vowels{
-        A = 0, E, I, O, U, a, e, i, o, u
-    };
-
+    
     for(int index = 0; index < user_str.length(); index++)
     {
         switch(user_str[index])
