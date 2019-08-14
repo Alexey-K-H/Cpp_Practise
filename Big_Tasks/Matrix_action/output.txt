@@ -1,0 +1,19 @@
+Enter the first matrix
+Enter count of raws:2
+Enter count of columns:2
+Enter matrix element [0][0] :-2
+Enter matrix element [0][1] : 1
+Enter matrix element [1][0] : 5
+Enter matrix element [1][1] : 4
+
+Enter the second matrix
+Attention! Count of raws of the second matrix should be the same as count of columns of the first matrix
+Count of raws will be setup automatically
+Count of raws:2
+Enter count of columns:1
+Enter matrix element [0][0] : 3
+Enter matrix element [1][0] :-1
+
+Result of multiple is:
+-7 
+11 
