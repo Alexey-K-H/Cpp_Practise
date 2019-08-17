@@ -1,0 +1,14 @@
+Enter count of participants: 5
+Enter competition's results
+for 1 player: 2.60  2.90  3.10 
+for 2 player: 2.90  2.95  3.00 
+for 3 player: 3.45  3.15  3.16 
+for 4 player: 3.00  3.10  2.90 
+for 5 player: 3.15  3.20  3.45 
+
+The best result among athletes:
+Number of athlete - 3
+Turn number - 1
+
+Number of athlete - 5
+Turn number - 3
