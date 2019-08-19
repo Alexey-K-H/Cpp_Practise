@@ -92,5 +92,9 @@ int main()
             }
         }
     }
+    input_1.close();
+    input_2.close();
+    output_1.close();
+    log_file.close();
     return 0;
 }
