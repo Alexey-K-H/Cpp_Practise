@@ -1,0 +1,17 @@
+Eagle_Owl
+Yoll
+female
+3500.45
+2
+
+Brown_Bear
+Misha
+male
+5600.680
+3
+
+White_Rabbit
+Marusya
+female
+250.52
+10
