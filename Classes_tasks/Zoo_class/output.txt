@@ -1,0 +1,28 @@
+Animal data: Eagle_Owl
+Name: Yoll
+Male/Female: female
+Cost: 3500.45
+Count of this kind of animal: 2
+Summary cost: 7000.9
+
+Animal data: Brown_Bear
+Name: Misha
+Male/Female: male
+Cost: 5600.68
+Count of this kind of animal: 3
+Summary cost: 16802
+
+Animal data: White_Rabbit
+Name: Marusya
+Male/Female: female
+Cost: 250.52
+Count of this kind of animal: 10
+Summary cost: 2505.2
+
+//Ввод осуществлялся с клавиатуры
+Animal data: Dog
+Name: Amy
+Male/Female: female
+Cost: 500.6
+Count of this kind of animal: 1
+Summary cost: 500.6
