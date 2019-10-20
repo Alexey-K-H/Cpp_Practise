@@ -5,5 +5,6 @@ desc
 0 = readfile in.txt
 5 = writefile out.txt
 4 = dump log.txt
+7 = space!)))
 csed
-0 -> 1 -> 2 -> 4 -> 3 -> 5
+0 -> 1 -> 2 -> 3 -> 4 -> 5

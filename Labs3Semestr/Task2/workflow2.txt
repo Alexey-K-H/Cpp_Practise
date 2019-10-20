@@ -1,0 +1,7 @@
+desc
+1 = replace Agatha Duck
+2 = grep friend
+3 = sort
+4 = dump log.txt
+csed
+1 -> 2 -> 3 -> 4

@@ -1,4 +1,4 @@
-desc
+
 1 = replace Agatha Malak
 2 = grep friend
 3 = sort
@@ -6,4 +6,4 @@ desc
 5 = writefile out.txt
 4 = dump log.txt
 csed
-0 -> 1 -> 2 -> 4 -> 3 -> 5
+0 -> 1 -> 2 -> 3 -> 4 -> 5

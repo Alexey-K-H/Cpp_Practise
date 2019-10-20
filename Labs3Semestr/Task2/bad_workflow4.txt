@@ -1,6 +1,6 @@
 desc
 1 = replace Agatha Malak
-2 = grep friend
+2 = grep
 3 = sort
 0 = readfile in.txt
 5 = writefile out.txt

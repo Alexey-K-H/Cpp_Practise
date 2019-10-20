@@ -1,0 +1,6 @@
+desc
+1 = replace Malak Monkeys
+2 = grep fuster
+0 = readfile in2.txt
+csed
+0 -> 1 -> 2

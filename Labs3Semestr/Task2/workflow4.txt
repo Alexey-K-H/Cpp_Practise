@@ -1,0 +1,7 @@
+desc
+1 = replace Ring Alter
+6 = sort
+5 = writefile out.txt
+4 = dump log.txt
+csed
+1 -> 4 -> 6 -> 5
