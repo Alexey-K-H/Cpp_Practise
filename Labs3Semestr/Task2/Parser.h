@@ -46,6 +46,6 @@ public:
 };
 
 //Проверка на наличие кодов ошибок которые могли прийти при чтении workflow
-int Check_parser_for_errors(int &returned_status);
+//int Check_parser_for_errors(int &returned_status);
 
 #endif

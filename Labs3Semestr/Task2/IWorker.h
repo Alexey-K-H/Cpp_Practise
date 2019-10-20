@@ -20,7 +20,6 @@ public:
     int Do_command() override;
     //void Print_text();
 
-
     //Остальные блоки - его друзья
     friend class Writefile;
     friend class Replace;

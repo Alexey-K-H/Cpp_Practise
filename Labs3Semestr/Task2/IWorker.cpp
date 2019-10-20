@@ -2,29 +2,45 @@
 
 int Readfile::Do_command() {
     input.open(input_file_name);
-    if(!input.is_open())
-    {
-        std::cout << "Input file doesn't exist!" << std::endl;
-        return 1;
-    }
-    else{
-        std::string curr_line;
-        while(getline(input, curr_line))
+
+    //В случае если файл не существует
+    try {
+        if(!input.is_open())
         {
-            text.push_back(curr_line);
+            throw std::ios_base::failure("file doesn't exist");
         }
     }
+    catch (std::exception &err)
+    {
+        std::cerr << "Error: " << err.what() << std::endl;
+        return 1;
+    }
+
+    std::string curr_line;
+    while(getline(input, curr_line))
+    {
+        text.push_back(curr_line);
+    }
+
     input.close();
     return 0;
 }
 
 int Writefile::Do_command() {
     output.open(read_blk->output_file_name);
-    if(!output.is_open())
+    //В случае если файл не существует
+    try {
+        if(!output.is_open())
+        {
+            throw std::ios_base::failure("file doesn't exist");
+        }
+    }
+    catch (std::exception &err)
     {
-        std::cout << "Output file doesn't exist!" << std::endl;
+        std::cerr << "Error: " << err.what() << std::endl;
         return 1;
     }
+
     for(const std::string& i : read_blk->text)
     {
         output << i << std::endl;
@@ -43,7 +59,6 @@ int Replace::Do_command() {
             it_pos = i.find(read_blk->first_replace_arg, it_pos);
         }
     }
-
     return 0;
 }
 
@@ -56,17 +71,24 @@ int Grep::Do_command() {
             read_blk->text.erase(read_blk->text.begin() + i);
         }
     }
-
     return 0;
 }
 
 int Dump::Do_command() {
     dump_out.open(read_blk->dump_file_name);
-    if(!dump_out.is_open())
+    //В случае если файл не существует
+    try {
+        if(!dump_out.is_open())
+        {
+            throw std::ios_base::failure("file doesn't exist");
+        }
+    }
+    catch (std::exception &err)
     {
-        std::cout << "Output file doesn't exist!" << std::endl;
+        std::cerr << "Error: " << err.what() << std::endl;
         return 1;
     }
+
     for(const std::string& i : read_blk->text)
     {
         dump_out << i << std::endl;
@@ -115,7 +137,7 @@ int Define_command(std::string &curr_com_block)
 int Executor_work(Readfile &read_block_info)
 {
     std::string curr_command;
-    for(int i = 0; i < read_block_info.order_commands.size(); i++)
+    for(unsigned long i = 0; i < read_block_info.order_commands.size(); i++)
     {
         auto it = read_block_info.order_of_blocks.find(read_block_info.order_commands[i]);
         curr_command = it->second;

@@ -32,30 +32,44 @@ int Parser::Check_curr_block(std::string &line_in_scheme) {
     {
         char num = line_in_scheme[0];
         number = atoi(&num);
-        if(number < 0)
+
+        //Если номер оказался отрицательным
+        try {
+            if(number < 0)
+            {
+                throw std::invalid_argument("Wrong number of the command!");
+            }
+        }
+        catch (std::exception &err)
         {
+            std::cerr << "Error:" << err.what() << std::endl;
             return 1;
         }
     }
-    else
+    //Если вообще не оказался номером
+    try {
+        if(!isdigit(line_in_scheme[0]) || (line_in_scheme[2] != '='))
+            throw std::invalid_argument("Number of block doesn't exist!");
+    }
+    catch (std::exception &err)
     {
+        std::cerr << "Error:" << err.what() << std::endl;
         return 1;
     }
 
-    //Наличие знака = между номером и именем блока (если это вообще имеет смысл...)
-     if(line_in_scheme[2] != '=')
-     {
-         return 1;
-     }
 
-
-    //Делаем проверку на то, что данный номер уже не встречался раньше
+    //Если оказалось, что данный номер уже встречался раньше
     auto it = order_of_blocks.find(number);
-    if(it != order_of_blocks.end()){
+    try {
+        if(it != order_of_blocks.end())
+            throw std::ios_base::failure("This number is already used!");
+    }
+    catch (std::exception &err)
+    {
+        std::cerr << "Error:" << err.what() << std::endl;
         return 1;
     }
 
-    //Эти два блока обязательно должны быть описаны
     int read_pos = line_in_scheme.find(read_keyword);
     int write_pos = line_in_scheme.find(write_keyword);
 
@@ -65,6 +79,16 @@ int Parser::Check_curr_block(std::string &line_in_scheme) {
     int sort_pos = line_in_scheme.find(sort_keyword);
     int dump_pos = line_in_scheme.find(dump_keyword);
 
+    //Если была введена неизветсная команда
+    try {
+        if(read_pos < 0 && write_pos < 0 && replace_pos < 0 && grep_pos < 0 && sort_pos < 0 && dump_pos < 0)
+            throw std::ios_base::failure("Unknown command! What do you mean?");
+    }
+    catch (std::exception &err)
+    {
+        std::cerr << "Error:" << err.what() << std::endl;
+        return 1;
+    }
 
     //Проверка для блока readfile///////////////////////////////////////////////////////////////////////////////////////
     if((read_pos >= 0) && (number >= 0))
@@ -74,24 +98,26 @@ int Parser::Check_curr_block(std::string &line_in_scheme) {
             name_file_begin = i;
         }
         name_file_begin += 2;
-        if(name_file_begin > line_in_scheme.size())
-        {
-            return 2;//Нет указанного input файла для чтения
+
+        //Если не был введен аргумент команды readfile
+        try {
+            if(name_file_begin > line_in_scheme.size())
+                throw std::invalid_argument("No input file for command <read>!");
         }
-        else
+        catch (std::exception &err)
         {
-            for(int k = name_file_begin, u = 0; k < line_in_scheme.size(); k++)
-            {
-                input_file_name.insert(u, 1, line_in_scheme[k]);
-                u++;
-            }
+            std::cerr << "Error:" << err.what() << std::endl;
+            return 2;
         }
+
+        for(unsigned long k = name_file_begin, u = 0; k < line_in_scheme.size(); k++)
+        {
+            input_file_name.insert(u, 1, line_in_scheme[k]);
+            u++;
+        }
+
         number_of_read_command = number;
         order_of_blocks.insert(std::make_pair(number, read_keyword));
-    }
-    else if(number < 0)
-    {
-        return 1;
     }
 
     //Проверка для блока writefile//////////////////////////////////////////////////////////////////////////////////////
@@ -102,25 +128,25 @@ int Parser::Check_curr_block(std::string &line_in_scheme) {
             name_file_begin = i;
         }
         name_file_begin += 2;
-        if(name_file_begin > line_in_scheme.size())
+
+        try {
+            if(name_file_begin > line_in_scheme.size())
+                throw std::invalid_argument("No output file for command <writefile>!");
+        }
+        catch (std::exception &err)
         {
+            std::cerr << "Error:" << err.what() << std::endl;
             return 3;//Нет указанного output файла для записи
         }
-        else
-        {
-            for(int k = name_file_begin, u = 0; k < line_in_scheme.size(); k++)
-            {
-                output_file_name.insert(u, 1, line_in_scheme[k]);
-                u++;
-            }
 
+        for(unsigned long k = name_file_begin, u = 0; k < line_in_scheme.size(); k++)
+        {
+            output_file_name.insert(u, 1, line_in_scheme[k]);
+            u++;
         }
+
         number_of_write_command = number;
         order_of_blocks.insert(std::make_pair(number, write_keyword));
-    }
-    else if(number < 0)
-    {
-        return 1;
     }
 
     //Проверка для блока replace////////////////////////////////////////////////////////////////////////////////////////
@@ -133,17 +159,20 @@ int Parser::Check_curr_block(std::string &line_in_scheme) {
             name_first_arg_begin = i;
         }
         name_first_arg_begin += 2;
-        if(name_first_arg_begin > line_in_scheme.size())
-        {
-            return 4;//Некорректное задание команды replace
+        try {
+            if(name_first_arg_begin > line_in_scheme.size())
+                throw std::invalid_argument("No first argument for command <replace>!");
         }
-        else
+        catch (std::exception &err)
         {
-            for(int k = name_first_arg_begin, u = 0; (k < line_in_scheme.size()) && (line_in_scheme[k] != ' '); k++)
-            {
-                first_replace_arg.insert(u, 1, line_in_scheme[k]);
-                u++;
-            }
+            std::cerr << "Error:" << err.what() << std::endl;
+            return 4;
+        }
+
+        for(int k = name_first_arg_begin, u = 0; (k < line_in_scheme.size()) && (line_in_scheme[k] != ' '); k++)
+        {
+            first_replace_arg.insert(u, 1, line_in_scheme[k]);
+            u++;
         }
 
         //Проверяем наличие второго аргумента
@@ -153,23 +182,23 @@ int Parser::Check_curr_block(std::string &line_in_scheme) {
             name_second_arg_begin = i;
         }
         name_second_arg_begin += 2;
-        if(name_second_arg_begin > line_in_scheme.size())
+        try{
+            if(name_second_arg_begin > line_in_scheme.size())
+                throw std::invalid_argument("No second argument for command <replace>!");
+        }
+        catch (std::exception &err)
         {
+            std::cerr << "Error:" << err.what() << std::endl;
             return 4;
         }
-        else
+
+        for(unsigned long k = name_second_arg_begin, u = 0; k < line_in_scheme.size(); k++)
         {
-            for(int k = name_second_arg_begin, u = 0; k < line_in_scheme.size(); k++)
-            {
-                second_replace_arg.insert(u, 1, line_in_scheme[k]);
-                u++;
-            }
+            second_replace_arg.insert(u, 1, line_in_scheme[k]);
+            u++;
         }
+
         order_of_blocks.insert(std::make_pair(number, replace_keyword));
-    }
-    else if(number < 0)
-    {
-        return 1;
     }
 
     //Проверка для блока grep///////////////////////////////////////////////////////////////////////////////////////////
@@ -180,33 +209,29 @@ int Parser::Check_curr_block(std::string &line_in_scheme) {
             name_grep_arg = i;
         }
         name_grep_arg += 2;
-        if(name_grep_arg > line_in_scheme.size())
-        {
-            return 5;//Нет аргумента для команды grep
+        try {
+            if(name_grep_arg > line_in_scheme.size())
+                throw std::invalid_argument("No argument for command grep!");
         }
-        else
+        catch (std::exception &err)
         {
-            for(int k = name_grep_arg, u = 0; k < line_in_scheme.size(); k++)
-            {
-                grep_arg.insert(u, 1, line_in_scheme[k]);
-                u++;
-            }
+            std::cerr << "Error:" << err.what() << std::endl;
+            return 5;
         }
+
+        for(unsigned long k = name_grep_arg, u = 0; k < line_in_scheme.size(); k++)
+        {
+            grep_arg.insert(u, 1, line_in_scheme[k]);
+            u++;
+        }
+
         order_of_blocks.insert(std::make_pair(number, grep_keyword));
-    }
-    else if(number < 0)
-    {
-        return 1;
     }
 
     //Проверка для блока sort///////////////////////////////////////////////////////////////////////////////////////////
     if((sort_pos >= 0) && (number >= 0))
     {
         order_of_blocks.insert(std::make_pair(number, sort_keyword));
-    }
-    else if(number < 0)
-    {
-        return 1;
     }
 
     //Проверка для блока dump///////////////////////////////////////////////////////////////////////////////////////////
@@ -217,23 +242,22 @@ int Parser::Check_curr_block(std::string &line_in_scheme) {
             name_file_dump_begin = i;
         }
         name_file_dump_begin += 2;
-        if(name_file_dump_begin > line_in_scheme.size())
-        {
-            return 6;//Нет указанного dump файла
+        try {
+            if(name_file_dump_begin > line_in_scheme.size())
+                throw std::invalid_argument("No file for command <dump>!");
         }
-        else
+        catch(std::exception &err)
         {
-            for(int k = name_file_dump_begin, u = 0; k < line_in_scheme.size(); k++)
-            {
-                dump_file_name.insert(u, 1, line_in_scheme[k]);
-                u++;
-            }
+            std::cerr << "Error:" << err.what() << std::endl;
+            return 6;
+        }
+
+        for(unsigned long k = name_file_dump_begin, u = 0; k < line_in_scheme.size(); k++)
+        {
+            dump_file_name.insert(u, 1, line_in_scheme[k]);
+            u++;
         }
         order_of_blocks.insert(std::make_pair(number, dump_keyword));
-    }
-    else if(number < 0)
-    {
-        return 1;
     }
 
     return 0;
@@ -254,64 +278,78 @@ int Parser::Check_order_of_blocks(std::string &order) {
 
     if(!no_input_file && !no_output_file)
     {
-        if(order_commands[0] != number_of_read_command || order_commands[order_commands.size() - 1] != number_of_write_command)
-        {
-            return -1;//Неправильный порядок
-        }
-
-        //Проверка того, что команды записи и чтения не встретились где то еще кроме концов цепи
-        for(int i = 1; i < order_commands.size() - 1; i++)
-        {
-            if(order_commands[i] == number_of_write_command || order_commands[i] == number_of_read_command)
+        try {
+            if(order_commands[0] != number_of_read_command || order_commands[order_commands.size() - 1] != number_of_write_command)
             {
-                return -1;
+                throw std::ios_base::failure("Incorrect order of blocks");//Неправильный порядок
+            }
+
+            //Проверка того, что команды записи и чтения не встретились где то еще кроме концов цепи
+            for(unsigned long i = 1; i < order_commands.size() - 1; i++)
+            {
+                if(order_commands[i] == number_of_write_command || order_commands[i] == number_of_read_command)
+                {
+                    throw std::ios_base::failure("Incorrect order of blocks");
+                }
             }
         }
+        catch (std::exception &err)
+        {
+            std::cerr << "Error:" << err.what() << std::endl;
+            return -1;
+        }
+
     }
     else if(!no_input_file && no_output_file)
     {
-        if(order_commands[0] != number_of_read_command)
-        {
-            return -1;//Неправильный порядок
-        }
-        for(int i = 1; i < order_commands.size() - 1; i++)
-        {
-            if(order_commands[i] == number_of_read_command)
+        try {
+            if(order_commands[0] != number_of_read_command)
             {
-                return -1;
+                throw std::ios_base::failure("Incorrect order of blocks");//Неправильный порядок
+            }
+            for(unsigned long i = 1; i < order_commands.size() - 1; i++)
+            {
+                if(order_commands[i] == number_of_read_command)
+                {
+                    throw std::ios_base::failure("Incorrect order of blocks");
+                }
             }
         }
-
+        catch (std::exception &err)
+        {
+            std::cerr << "Error:" << err.what() << std::endl;
+            return -1;
+        }
     }
     else if(no_input_file && !no_output_file)
     {
-        if(order_commands[order_commands.size() - 1] != number_of_write_command)
-        {
-            return -1;//Неправильный порядок
-        }
-        for(int i = 1; i < order_commands.size() - 1; i++)
-        {
-            if(order_commands[i] == number_of_write_command)
+        try {
+            if(order_commands[order_commands.size() - 1] != number_of_write_command)
             {
-                return -1;
+                throw std::ios_base::failure("Incorrect order of blocks");
+            }
+            for(unsigned long i = 1; i < order_commands.size() - 1; i++)
+            {
+                if(order_commands[i] == number_of_write_command)
+                {
+                    throw std::ios_base::failure("Incorrect order of blocks");
+                }
             }
         }
+        catch (std::exception &err)
+        {
+            std::cerr << "Error:" << err.what() << std::endl;
+            return -1;
+        }
     }
-
     return 0;
 }
 
 int Parser::Read_scheme() {
     workflow_file.open(workflow_file_name);
 
-    //Проверка того, что файл существует
-    /*if(!workflow_file.is_open())
-    {
-        return 1;
-    }*/
-
+    //В случае если файл не существует
     try {
-        workflow_file.open("Unreal file");
         if(!workflow_file.is_open())
         {
             throw std::ios_base::failure("file doesn't exist");
@@ -343,67 +381,66 @@ int Parser::Read_scheme() {
                 else
                 {
                     int curr_block_check_status = Check_curr_block(curr_str_scheme);
-                    switch (curr_block_check_status)
-                    {
-                        case 1: {
-                            return 2;
-                        }
-                        case 2:{
-                            return 3;
-                        }
-                        case 3:{
-                            return 4;
-                        }
-                        case 4:{
-                            return 5;
-                        }
-                        case 5:{
-                            return 6;
-                        }
-                        case 6:{
-                            return 7;
-                        }
-                    }
-
+                    if(curr_block_check_status)
+                        return 1;
                 }
             }
+
+            //В случае если не было закрывающего ключевого слова
+            try {
+                if(!is_close_key_word)
+                {
+                    throw std::ios_base::failure("Incorrect workflow file!");
+                }
+            }
+            catch (std::exception &err)
+            {
+                std::cerr << "Error:" << err.what() << std::endl;
+                return 2;
+            }
+
             if(number_of_read_command < 0)
                 no_input_file = true;
             if(number_of_write_command < 0)
                 no_output_file = true;
 
-
-            if(!is_close_key_word)
-            {
-                return 2;
-            }
         }
 
-        if(!is_open_key_word && workflow_file.eof())
+        try {
+            if(!is_open_key_word)
+                throw std::ios_base::failure("Incorrect workflow file");
+        }
+        catch (std::exception &err)
         {
+            std::cerr << "Error:" << err.what() << std::endl;
+            return 2;
+        }
+        getline(workflow_file, curr_str_scheme);
+        int pointer = curr_str_scheme.find("->");//Проверка наличия символа пререхода в строке с порядком
+
+        try {
+            if(pointer <= 0)
+            {
+                throw std::ios_base::failure("No order of the blocks!");
+            }
+        }
+        catch (std::exception &err)
+        {
+            std::cerr << "Error:" << err.what() << std::endl;
             return 2;
         }
 
-        getline(workflow_file, curr_str_scheme);
-        bool is_order_of_blocks = false;//Наличие порядка выполнения блоков
-        auto pointer = curr_str_scheme.find("->");//Проверка наличия символа пререхода в строке с порядком
-        if(pointer)
+        if(pointer > 0)
         {
-            is_order_of_blocks = true;
             if(Check_order_of_blocks(curr_str_scheme))
             {
                 return -1;
             }
         }
 
-        if(!is_order_of_blocks)
-        {
-            return 2;
-        }
-
         if(no_input_file && no_output_file)
         {
-            return 8;//Небоходиа проверка наличи ключей для входного и выходного файла
+            return 8;//Небоходима проверка наличи ключей для входного и выходного файла
         }
         else if(no_input_file)
         {
@@ -416,48 +453,4 @@ int Parser::Read_scheme() {
     }
     workflow_file.close();
     return 0;
-}
-
-int Check_parser_for_errors(int &returned_status)
-{
-    switch (returned_status)
-    {
-        case 1:{
-            std::cout << "Workflow file doesn't exist!" << std::endl;
-            return 1;
-        }
-        case 2:{
-            std::cout << "Incorrect workflow file!" << std::endl;
-            return 2;
-        }
-        case 3:{
-            std::cout << "No input file for command <read>!" << std::endl;
-            return 3;
-        }
-        case 4:{
-            std::cout << "No output file for command <write>!" << std::endl;
-            return 4;
-        }
-        case 5:{
-            std::cout << "Incorrect definition for command <replace>!" << std::endl;
-            return 5;
-        }
-        case 6:{
-            std::cout << "Incorrect definition for command <grep>!" << std::endl;
-            return 6;
-        }
-        case 7:{
-            std::cout << "Incorrect definition for command <dump>!" << std::endl;
-            return 7;
-        }
-        case -1:{
-            std::cout << "Incorrect order of the commands!" << std::endl;
-            return -1;
-        }
-        case 8:{
-            return 8;
-        }
-        default:
-            return 0;
-    }
 }
