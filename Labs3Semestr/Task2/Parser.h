@@ -1,16 +1,15 @@
-#ifndef WORDEXECUTOR_PARSER_H
-#define WORDEXECUTOR_PARSER_H
+#ifndef LAB_2_PARSER_H
+#define LAB_2_PARSER_H
 
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
-#include <stdexcept>
 #include <map>
-#include <cstdlib>
 #include <algorithm>
+#include <stdexcept>
 
-//Обрабатывает блок схему, котроая подается в командной строке
+//Обрабатывает блок-схему, котроая подается в командной строке
 
 class Parser
 {
@@ -24,6 +23,9 @@ public:
     int number_of_read_command;
     int number_of_write_command;
 
+    bool no_input_file;
+    bool no_output_file;
+
     std::string first_replace_arg;//Первый аргумент команды replace
     std::string second_replace_arg;//Второй аргумент команды replace
 
@@ -34,7 +36,10 @@ public:
     std::vector<int> order_commands;
     std::map<int, std::string> order_of_blocks;
     Parser(std::string &workflow_name);
-    ~Parser();
+
+    void Set_input_file(std::string &in_name);
+    void Set_output_file(std::string &out_name);
+
     int Check_curr_block(std::string &line_in_scheme);//Обрабатывает данные для блока
     int Check_order_of_blocks(std::string &order);
     int Read_scheme();
@@ -42,4 +47,5 @@ public:
 
 //Проверка на наличие кодов ошибок которые могли прийти при чтении workflow
 int Check_parser_for_errors(int &returned_status);
+
 #endif

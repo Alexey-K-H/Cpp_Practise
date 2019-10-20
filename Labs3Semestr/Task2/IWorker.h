@@ -1,5 +1,5 @@
-#ifndef WORDEXECUTOR_IWORKER_H
-#define WORDEXECUTOR_IWORKER_H
+#ifndef LAB_2_IWORKER_H
+#define LAB_2_IWORKER_H
 
 #include "Parser.h"
 
@@ -15,7 +15,7 @@ private:
     std::vector<std::string> text;
 public:
     Readfile(std::string &workflow_file):
-    Parser(workflow_file){}
+            Parser(workflow_file){}
 
     int Do_command() override;
     //void Print_text();
@@ -37,7 +37,7 @@ private:
     Readfile *read_blk;
 public:
     Writefile(Readfile *read_block):
-    read_blk(read_block){}
+            read_blk(read_block){}
 
     int Do_command() override;
 };
@@ -48,7 +48,7 @@ private:
     Readfile *read_blk;
 public:
     Replace(Readfile *read_block):
-    read_blk(read_block){}
+            read_blk(read_block){}
 
     int Do_command() override;
 };
@@ -59,7 +59,7 @@ private:
     Readfile *read_blk;
 public:
     Grep(Readfile *read_block):
-    read_blk(read_block){}
+            read_blk(read_block){}
 
     int Do_command() override;
 };
@@ -70,7 +70,7 @@ private:
     Readfile *read_blk;
 public:
     Sort(Readfile *read_block):
-    read_blk(read_block){}
+            read_blk(read_block){}
 
     int Do_command() override;
 };
@@ -82,9 +82,13 @@ private:
     Readfile *read_blk;
 public:
     Dump(Readfile *read_block):
-    read_blk(read_block){}
+            read_blk(read_block){}
 
     int Do_command() override;
 };
+
+
+int Define_command(std::string &curr_com_block);
+int Executor_work(Readfile &read_block_info);
 
 #endif

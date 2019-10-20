@@ -18,15 +18,6 @@ int Readfile::Do_command() {
     return 0;
 }
 
-/*void Readfile::Print_text() {
-    std::cout << "<Text from file>" << std::endl;
-    for(const std::string& i : text)
-    {
-        std::cout << i << std::endl;
-    }
-    std::cout << std::endl;
-}*/
-
 int Writefile::Do_command() {
     output.open(read_blk->output_file_name);
     if(!output.is_open())
@@ -38,7 +29,6 @@ int Writefile::Do_command() {
     {
         output << i << std::endl;
     }
-    //std::cout << "Text saved to:" << read_blk->output_file_name << std::endl;
     output.close();
     return 0;
 }
@@ -53,11 +43,7 @@ int Replace::Do_command() {
             it_pos = i.find(read_blk->first_replace_arg, it_pos);
         }
     }
-    /*std::cout << "<After replace> str:" << read_blk->first_replace_arg << " to str:" << read_blk->second_replace_arg << std::endl;
-    for(const std::string& i : read_blk->text)
-    {
-        std::cout << i << std::endl;
-    }*/
+
     return 0;
 }
 
@@ -71,16 +57,11 @@ int Grep::Do_command() {
         }
     }
 
-    /*std::cout << "<After grep> arg:" << read_blk->grep_arg << std::endl;
-    for(const std::string& i : read_blk->text)
-    {
-        std::cout << i << std::endl;
-    }*/
     return 0;
 }
 
 int Dump::Do_command() {
-    dump_out.open(read_blk->output_file_name);
+    dump_out.open(read_blk->dump_file_name);
     if(!dump_out.is_open())
     {
         std::cout << "Output file doesn't exist!" << std::endl;
@@ -90,12 +71,128 @@ int Dump::Do_command() {
     {
         dump_out << i << std::endl;
     }
-    //std::cout << "Text saved to:" << read_blk->output_file_name << std::endl;
     dump_out.close();
     return 0;
 }
 
 int Sort::Do_command() {
     std::sort(read_blk->text.begin(), read_blk->text.end());
+    return 0;
+}
+
+
+int Define_command(std::string &curr_com_block)
+{
+    /*
+      replace - 1
+      grep - 2
+      sort - 3
+      dump - 4
+      writefile - 5
+    */
+    if(curr_com_block == "replace")
+    {
+        return 1;
+    }
+    else if(curr_com_block == "grep")
+    {
+        return 2;
+    }
+    else if(curr_com_block == "sort")
+    {
+        return 3;
+    }
+    else if(curr_com_block == "dump")
+    {
+        return 4;
+    }
+    else if(curr_com_block == "writefile")
+    {
+        return 5;
+    }
+}
+
+int Executor_work(Readfile &read_block_info)
+{
+    std::string curr_command;
+    for(int i = 0; i < read_block_info.order_commands.size(); i++)
+    {
+        auto it = read_block_info.order_of_blocks.find(read_block_info.order_commands[i]);
+        curr_command = it->second;
+
+        switch (Define_command(curr_command))
+        {
+            case 1://-replace
+            {
+                Replace replace_block(&read_block_info);
+                if(replace_block.Do_command() == 0)
+                {
+                    std::cout << "Successfully replaced" << std::endl;
+                }
+                else
+                    return -1;
+                break;
+            }
+
+            case 2://-grep
+            {
+                Grep grep_block(&read_block_info);
+                if(grep_block.Do_command() == 0)
+                {
+                    std::cout << "Successfully greped" << std::endl;
+                }
+                else
+                    return -1;
+                break;
+            }
+
+            case 3://-sort
+            {
+                Sort sort_block(&read_block_info);
+                if(sort_block.Do_command() == 0)
+                {
+                    std::cout << "Successfully sorted" << std::endl;
+                }
+                else
+                    return -1;
+                break;
+            }
+
+            case 4://-dump
+            {
+                Dump dump_block(&read_block_info);
+                if(dump_block.Do_command() == 0)
+                {
+                    std::cout << "Successfully saved to dump-file" << std::endl;
+                }
+                else
+                    return -1;
+                break;
+            }
+            case 5://-writefile
+            {
+                Writefile write_block(&read_block_info);
+                if(write_block.Do_command() == 0)
+                {
+                    std::cout << "Successfully saved" << std::endl;
+                }
+                else
+                    return -1;
+                break;
+            }
+        }
+    }
+
+    if(read_block_info.no_output_file)
+    {
+        Writefile write_block(&read_block_info);
+        if(write_block.Do_command() == 0)
+        {
+            std::cout << "Successfully saved" << std::endl;
+        }
+        else
+            return -1;
+    }
+
     return 0;
 }
