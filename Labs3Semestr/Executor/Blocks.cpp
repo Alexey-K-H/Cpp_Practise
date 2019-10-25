@@ -127,14 +127,17 @@ int Grep::Do_command() {
         return 1;
     }
 
-    for(unsigned long long i = 0; i < text.size(); i++)
+    std::vector<std::string> new_text;
+    for(auto & i : text)
     {
-        int it_pos = text[i].find(argument_grep, 0);
-        if(it_pos == std::string::npos)
+        int it_pos = i.find(argument_grep, 0);
+        if(it_pos > 0)
         {
-            text.erase(text.begin() + i);
+            new_text.push_back(i);
         }
     }
+    text.resize(new_text.size());
+    text = new_text;
     return 0;
 }
 
