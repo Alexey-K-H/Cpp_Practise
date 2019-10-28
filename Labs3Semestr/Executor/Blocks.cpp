@@ -36,7 +36,7 @@ Readfile::Readfile(std::list<std::string>& arguments, std::vector<std::string>& 
     auto it = arguments.begin();
     std::advance(it, 1);
     if(it != arguments.end())
-      in_name = *it;
+        in_name = *it;
     text = some_text;
 }
 
@@ -76,7 +76,7 @@ Writefile::Writefile(std::list<std::string> &arguments, std::vector<std::string>
     auto it = arguments.begin();
     std::advance(it, 1);
     if(it != arguments.end())
-      out_name = *it;
+        out_name = *it;
     text = some_text;
 }
 
@@ -166,11 +166,11 @@ Replace::Replace(std::list<std::string> &arguments, std::vector<std::string>& so
     auto it = arguments.begin();
     std::advance(it, 1);
     if(it != arguments.end())
-       first_replace_arg = *it;
+        first_replace_arg = *it;
 
     std::advance(it, 1);
     if(it != arguments.end())
-       second_replace_arg = *it;
+        second_replace_arg = *it;
 
     text = some_text;
 }
@@ -178,7 +178,7 @@ Replace::Replace(std::list<std::string> &arguments, std::vector<std::string>& so
 int Replace::Do_command() {
     try{
         if(first_replace_arg.empty() || second_replace_arg.empty())
-        throw std::invalid_argument("Not enough argument for replace!");
+            throw std::invalid_argument("Not enough argument for replace!");
     }
     catch (std::exception& err)
     {
@@ -209,7 +209,7 @@ Dump::Dump(std::list<std::string>& arguments, std::vector<std::string>& some_tex
     auto it = arguments.begin();
     std::advance(it, 1);
     if(it != arguments.end())
-       log_name = *it;
+        log_name = *it;
     text = some_text;
 }
 
@@ -236,3 +236,4 @@ int Dump::Do_command() {
 std::vector<std::string> Dump::Return_result_text() {
     return text;
 }
+

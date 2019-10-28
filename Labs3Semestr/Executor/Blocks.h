@@ -1,6 +1,5 @@
 #ifndef EXECUTOR_BLOCKS_H
 #define EXECUTOR_BLOCKS_H
-
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -122,5 +121,4 @@ private:
     std::ofstream log_file;
     std::vector<std::string> text;
 };
-
 #endif

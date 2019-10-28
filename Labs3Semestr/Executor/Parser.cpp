@@ -94,15 +94,51 @@ int Parser::Check_curr_block(std::string &line_in_scheme) {
 }
 
 int Parser::Check_order_of_blocks(std::string &order) {
-    std::cout << "Order of blocks" << std::endl;
-    std::cout << order << std::endl;
 
+    //Если задана лишь одна команда
+    if(order.size() == 1)
+    {
+        try{
+            if(!isdigit(order[0]))
+            {
+                throw std::ios_base::failure("No order of blocks!");
+            }
+        }
+        catch (std::exception &err)
+        {
+            std::cerr << "Error:" << err.what() << std::endl;
+            return -1;
+        }
+        order_of_commands.push_back(atoi(&order[0]));
+    }
+
+    //Если задано несколько команд, то число знаков -> долно быть size-1
+    unsigned int count_nodes = 0;
+    auto pos = order.find("->", 0);
+    while (pos != std::string::npos)
+    {
+        count_nodes++;
+        pos = order.find("->", pos + 1);
+    }
+
+    unsigned int count_commands = 0;
     for(char &i : order)
     {
         if(isdigit(i))
         {
+            count_commands++;
             order_of_commands.push_back(atoi(&i));
         }
+    }
+
+    try {
+        if(count_nodes != count_commands - 1)
+            throw std::ios_base::failure("Incorrect order of blocks. Problems with nodes!");
+    }
+    catch (std::exception &err)
+    {
+        std::cerr << "Error:" << err.what() << std::endl;
+        return -1;
     }
 
     if(number_of_read_command >= 0 && number_of_write_command >= 0)
@@ -248,11 +284,9 @@ int Parser::Read_scheme(std::string &name_of_workflow) {
             return 2;
         }
 
-        getline(workflow_file, curr_str_in_scheme);
-        int pointer = curr_str_in_scheme.find("->");//Проверка наличия символа пререхода в строке с порядком
-
+        //Если не оказалось порядка выполнения блоков
         try {
-            if(pointer <= 0)
+            if(!getline(workflow_file, curr_str_in_scheme))
             {
                 throw std::ios_base::failure("No order of the blocks!");
             }
@@ -263,12 +297,9 @@ int Parser::Read_scheme(std::string &name_of_workflow) {
             return 2;
         }
 
-        if(pointer > 0)
+        if(Check_order_of_blocks(curr_str_in_scheme))
         {
-            if(Check_order_of_blocks(curr_str_in_scheme))
-            {
-                return -1;
-            }
+            return -1;
         }
     }
 
@@ -285,3 +316,4 @@ int Parser::Read_scheme(std::string &name_of_workflow) {
     workflow_file.close();
     return 0;
 }
+
