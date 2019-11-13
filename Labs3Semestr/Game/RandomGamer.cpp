@@ -1,6 +1,11 @@
 #include "Player.h"
 
 //Специфика случайного выбора выбора
+
+Type_player RandomGamer::return_type_player() {
+    return random_player;
+}
+
 char RandomGamer::Define_name_column_by_num(int &num) {
     switch (num)
     {
@@ -115,20 +120,20 @@ void RandomGamer::Choose_coordinates_for_attack(int &coord_row, char &coord_colu
     coord_column = Define_name_column_by_num(Column_num);
 }
 
-void RandomGamer::Fire(int row, char column) {
+void RandomGamer::Get_Fire(int row, char column, Gamer* enemy) {
     bool retry = true;//Повторная попытка если пользователь ввел координаты, которые уже проверял ранее
     while (retry)
     {
         char PotentialRetry = Find_on_attack_board(row, column);//Ищем введенные координаты на поле противника
-        if(PotentialRetry == '#')
+        if(PotentialRetry == '#' || (PotentialRetry == 'O' && enemy->return_type_player() == optimal_player))
         {
             //Если в данной координате уже был допущен промах
-            Choose_coordinates_for_attack(row, column);
+            enemy->Choose_coordinates_for_attack(row, column);
         }
         else if(PotentialRetry == 'H' || PotentialRetry == 'X')
         {
             //Если в данной позиции уже был нанесен удар или в ней обломки убитого корабля
-            Choose_coordinates_for_attack(row, column);
+            enemy->Choose_coordinates_for_attack(row, column);
         }
         else
             retry = false;
@@ -163,6 +168,40 @@ void RandomGamer::Fire(int row, char column) {
                     {
                         gameBoard[ship_coords[j].first][ship_coords[j].second] = 'X';
                         attackBoard[ship_coords[j].first][ship_coords[j].second] = 'X';
+
+
+                        if(enemy->return_type_player() == optimal_player)
+                        {
+                            //Клетки окружения уничтоженного корабля рассматриваться не будут в дальнейшем (если противник наносивший удар умный ИИ)
+                            if(ship_coords[j].first - 1 >= 0 && attackBoard[ship_coords[j].first - 1][ship_coords[j].second] != 'X')
+                            {
+                                attackBoard[ship_coords[j].first - 1][ship_coords[j].second] = 'O';
+
+                                if(ship_coords[j].second + 1 <= 9 && attackBoard[ship_coords[j].first - 1][ship_coords[j].second + 1] != 'X')
+                                    attackBoard[ship_coords[j].first - 1][ship_coords[j].second + 1] = 'O';
+
+                                if(ship_coords[j].second - 1 >= 0 && attackBoard[ship_coords[j].first - 1][ship_coords[j].second - 1] != 'X')
+                                    attackBoard[ship_coords[j].first - 1][ship_coords[j].second - 1] = 'O';
+                            }
+
+                            if(ship_coords[j].first + 1 <= 9 && attackBoard[ship_coords[j].first + 1][ship_coords[j].second] != 'X')
+                            {
+                                attackBoard[ship_coords[j].first + 1][ship_coords[j].second] = 'O';
+
+                                if(ship_coords[j].second + 1 <= 9 && attackBoard[ship_coords[j].first][ship_coords[j].second + 1] != 'X')
+                                    attackBoard[ship_coords[j].first + 1][ship_coords[j].second + 1] = 'O';
+
+                                if(ship_coords[j].second - 1 >= 0 && attackBoard[ship_coords[j].first][ship_coords[j].second - 1] != 'X')
+                                    attackBoard[ship_coords[j].first + 1][ship_coords[j].second - 1] = 'O';
+                            }
+
+                            if(ship_coords[j].second + 1 <= 9 && attackBoard[ship_coords[j].first][ship_coords[j].second + 1] != 'X')
+                                attackBoard[ship_coords[j].first][ship_coords[j].second + 1] = 'O';
+
+                            if(ship_coords[j].second - 1 >= 0 && attackBoard[ship_coords[j].first][ship_coords[j].second - 1] != 'X')
+                                attackBoard[ship_coords[j].first][ship_coords[j].second - 1] = 'O';
+                        }
+
                     }
                 }
             }

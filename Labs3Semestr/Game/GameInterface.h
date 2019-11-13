@@ -7,12 +7,6 @@
 #include <cstring>
 #include <ctime>
 
-enum Type_player{
-    console_player,
-    random_player,
-    optimal_player
-};
-
 void Manual();
 Type_player define_type_of_player(const char *curr_type);
 std::string Print_type(Type_player &type);

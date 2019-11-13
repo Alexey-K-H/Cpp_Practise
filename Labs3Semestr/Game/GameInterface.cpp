@@ -90,12 +90,13 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
         first_player->PrintBoard();
 
         first_player->Choose_coordinates_for_attack(curr_turn_row, curr_turn_column);
-        second_player->Fire(curr_turn_row, curr_turn_column);
+        second_player->Get_Fire(curr_turn_row, curr_turn_column, first_player);
 
         system("clear");
 
         if(second_player->Check_for_win())
         {
+            system("clear");
             std::cout << "PLAYER1 SUNK ALL SHIPS OF PLAYER2! PLAYER1 WINS ROUND!!!\n";
             std::cout << "CONGRATULATIONS!\n";
             second_player->Print_attack_board();
@@ -115,13 +116,14 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
         second_player->PrintBoard();
 
         second_player->Choose_coordinates_for_attack(curr_turn_row, curr_turn_column);
-        first_player->Fire(curr_turn_row, curr_turn_column);
+        first_player->Get_Fire(curr_turn_row, curr_turn_column, second_player);
 
         system("clear");
 
         if(first_player->Check_for_win())
         {
-            std::cout << "PLAYER2 SUNK ALL SHIPS OF PLAYER2! PLAYER1 WINS ROUND!!!\n";
+            system("clear");
+            std::cout << "PLAYER2 SUNK ALL SHIPS OF PLAYER1! PLAYER2 WINS ROUND!!!\n";
             std::cout << "CONGRATULATIONS!\n";
             first_player->Print_attack_board();
             break;
