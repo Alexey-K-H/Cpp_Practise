@@ -49,7 +49,7 @@ public:
 };
 
 
-
+char Define_name_column_by_num(int &num);
 
 class ConsoleGamer : public Gamer
 {
@@ -67,7 +67,6 @@ class RandomGamer : public Gamer
 public:
     Type_player return_type_player() override;
     void Add_ships(int number_of_ships) override;
-    char Define_name_column_by_num(int &num);
     void Choose_coordinates_for_attack(int &coord_row, char &coord_column) override;
 };
 
@@ -76,7 +75,6 @@ class OptimalGamer : public Gamer
 {
 public:
     Type_player return_type_player() override;
-    char Define_name_column_by_num(int &num);
     void Add_ships(int number_of_ships) override;
     void Choose_coordinates_for_attack(int &coord_row, char &coord_column) override;
 };

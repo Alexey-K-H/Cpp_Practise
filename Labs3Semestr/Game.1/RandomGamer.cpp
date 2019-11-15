@@ -6,34 +6,6 @@ Type_player RandomGamer::return_type_player() {
     return random_player;
 }
 
-char RandomGamer::Define_name_column_by_num(int &num) {
-    switch (num)
-    {
-        case 0:
-            return 'A';
-        case 1:
-            return 'B';
-        case 2:
-            return 'C';
-        case 3:
-            return 'D';
-        case 4:
-            return 'E';
-        case 5:
-            return 'F';
-        case 6:
-            return 'G';
-        case 7:
-            return 'H';
-        case 8:
-            return 'I';
-        case 9:
-            return 'J';
-        default:
-            return 'Z';
-    }
-}
-
 
 void RandomGamer::Add_ships(int number_of_ships) {
     std::cout << "Create random ships location..." << std::endl;
