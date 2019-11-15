@@ -103,7 +103,7 @@ void ConsoleGamer::Add_ships(int number_of_ships) {
                 else
                 {
                     ship_size[size - 1]++;
-                    system("clear");
+                    std::system("clear");
                     std::cout << "Sorry, invalid coordinate.Try again!\n";
                     PrintBoard();
                 }
@@ -129,19 +129,19 @@ void ConsoleGamer::Add_ships(int number_of_ships) {
                 else
                 {
                     ship_size[size - 1]++;
-                    system("clear");
+                    std::system("clear");
                     std::cout << "Sorry, invalid coordinate.Try again!\n";
                     PrintBoard();
                 }
             }
             else{
                 ship_size[size - 1]++;
-                system("clear");
+                std::system("clear");
                 std::cout << "Error! Not a valid ship direction\n";
                 PrintBoard();
             }
         }
-        system("clear");
+        std::system("clear");
         PrintBoard();
     }
 }
@@ -154,95 +154,6 @@ void ConsoleGamer::Choose_coordinates_for_attack(int &coord_row, char &coord_col
     Row_coordinate(coord_row);
 }
 
-void ConsoleGamer::Get_Fire(int row, char column, Gamer* enemy) {
-    bool retry = true;//Повторная попытка если пользователь ввел координаты, которые уже проверял ранее
-    while (retry)
-    {
-        char PotentialRetry = Find_on_attack_board(row, column);//Ищем введенные координаты на поле противника
-        if(PotentialRetry == '#' || (PotentialRetry == 'O' && enemy->return_type_player() == optimal_player))
-        {
-            //Если в данной координате уже был допущен промах
-            std::cout << "You have already missed at this location! Please retry!\n";
-            enemy->Choose_coordinates_for_attack(row, column);
-        }
-        else if(PotentialRetry == 'H' || PotentialRetry == 'X')
-        {
-            //Если в данной позиции уже был нанесен удар или в ней обломки убитого корабля
-            std::cout << "You have already heated at this location! Please retry!\n";
-            enemy->Choose_coordinates_for_attack(row, column);
-        }
-        else
-            retry = false;
-    }
-
-    char location = Find(row, column);//Проверяем на карте с кораблями, куда попал удар
-    if(location == '*')
-    {
-        //Пустая клетка
-        std::cout << "You have missed at position:[" << column << "][" << row << "]\n";
-        attackBoard[row][ConvertColumn(column)] = '#';//M - missed промах
-        return;
-    }
-    else if(location == 'S')
-    {
-        //Палуба корабля
-        //Проверяем в какой из кораблей мы попали
-        for(unsigned long i  = 0; i < player_ships.size(); i++)
-        {
-            if(player_ships[i].Check_for_hit(row, ConvertColumn(column)))
-            {
-                std::cout << "You have hit at location:[" << column << "][" << row << "]\n";
-                attackBoard[row][ConvertColumn(column)] = 'H';//H - hit нанесен урон палубе
-                gameBoard[row][ConvertColumn(column)] = 'H';
-                //Если это была последняя палуба корабля
-                if(player_ships[i].Get_length() == 0)
-                {
-                    count_ships--;
-                    std::cout << "You sunk a ship!\n";
-                    std::vector<std::pair<int, int>> ship_coords = player_ships[i].ReturnCoordinates();
-                    for(unsigned long j = 0; j < ship_coords.size(); j++)
-                    {
-                        gameBoard[ship_coords[j].first][ship_coords[j].second] = 'X';
-                        attackBoard[ship_coords[j].first][ship_coords[j].second] = 'X';
-
-                        if(enemy->return_type_player() == optimal_player)
-                        {
-                            //Клетки окружения уничтоженного корабля рассматриваться не будут в дальнейшем (если противник наносивший удар умный ИИ)
-                            if(ship_coords[j].first - 1 >= 0 && attackBoard[ship_coords[j].first - 1][ship_coords[j].second] != 'X')
-                            {
-                                attackBoard[ship_coords[j].first - 1][ship_coords[j].second] = 'O';
-
-                                if(ship_coords[j].second + 1 <= 9 && attackBoard[ship_coords[j].first - 1][ship_coords[j].second + 1] != 'X')
-                                    attackBoard[ship_coords[j].first - 1][ship_coords[j].second + 1] = 'O';
-
-                                if(ship_coords[j].second - 1 >= 0 && attackBoard[ship_coords[j].first - 1][ship_coords[j].second - 1] != 'X')
-                                    attackBoard[ship_coords[j].first - 1][ship_coords[j].second - 1] = 'O';
-                            }
-
-                            if(ship_coords[j].first + 1 <= 9 && attackBoard[ship_coords[j].first + 1][ship_coords[j].second] != 'X')
-                            {
-                                attackBoard[ship_coords[j].first + 1][ship_coords[j].second] = 'O';
-
-                                if(ship_coords[j].second + 1 <= 9 && attackBoard[ship_coords[j].first][ship_coords[j].second + 1] != 'X')
-                                    attackBoard[ship_coords[j].first + 1][ship_coords[j].second + 1] = 'O';
-
-                                if(ship_coords[j].second - 1 >= 0 && attackBoard[ship_coords[j].first][ship_coords[j].second - 1] != 'X')
-                                    attackBoard[ship_coords[j].first + 1][ship_coords[j].second - 1] = 'O';
-                            }
-
-                            if(ship_coords[j].second + 1 <= 9 && attackBoard[ship_coords[j].first][ship_coords[j].second + 1] != 'X')
-                                attackBoard[ship_coords[j].first][ship_coords[j].second + 1] = 'O';
-
-                            if(ship_coords[j].second - 1 >= 0 && attackBoard[ship_coords[j].first][ship_coords[j].second - 1] != 'X')
-                                attackBoard[ship_coords[j].first][ship_coords[j].second - 1] = 'O';
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-}
 
 
 

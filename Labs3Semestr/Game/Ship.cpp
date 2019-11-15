@@ -29,3 +29,4 @@ bool Ship::Check_for_hit(int row, int column) {
 std::vector<std::pair<int, int>> Ship::ReturnCoordinates() {
     return coordinates_of_ship;
 }
+
