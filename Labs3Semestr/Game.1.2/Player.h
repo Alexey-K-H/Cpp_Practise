@@ -13,6 +13,12 @@ enum Type_player{
     optimal_player
 };
 
+enum Result_of_attack
+{
+    hit,
+    miss
+};
+
 class Gamer
 {
 protected:
@@ -39,10 +45,9 @@ public:
     void Print_attack_board(Gamer* enemy);//Вывод поля для противника(места куда он стреляет)
     virtual void Choose_coordinates_for_attack(int &coord_row, char &coord_column) = 0;//Коррдинаты, которые игрок выбирает при своем ходе
 
-    void Get_Fire(int row, char column, Gamer* enemy);//Принять огонь противника на свое поле
+    Result_of_attack Get_Fire(int row, char column, Gamer* enemy);//Принять огонь противника на свое поле
     char Find(int row, char column);//Поиск на поле введенных координат
     char Find_on_attack_board(int row, char column);//Поиск на поле противника
-
 
     bool ValidCoordinate(int curr_shipRow, char curr_shipColumn, char direction, int size_of_ship);//Проверка того, что координаты судна для расопложения на карте верны
     static int ConvertColumn(char column);//По букве опрдеелить номер в массиве

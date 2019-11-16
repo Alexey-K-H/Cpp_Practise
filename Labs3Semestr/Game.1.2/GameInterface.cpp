@@ -107,17 +107,23 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
 
         while (true)
         {
-            std::cout << "\n=====================Player 1 turn=========================\n";
+            bool retry_for_first = true;//Повторный ход, в случае если игрок нанес удар по кораблю или потопил его
+            while (retry_for_first)
+            {
+                std::cout << "\n=====================Player 1 turn=========================\n";
 
-            if(first_player->return_type_player() == console_player){
-                std::cout << "============Player 2 don't look at the screen=================\n";
-                first_player->Print_attack_board(second_player);
+                if(first_player->return_type_player() == console_player){
+                    std::cout << "============Player 2 don't look at the screen=================\n";
+                    first_player->Print_attack_board(second_player);
+                }
+
+                first_player->Choose_coordinates_for_attack(curr_turn_row, curr_turn_column);
+                if(second_player->Get_Fire(curr_turn_row, curr_turn_column, first_player) == miss || second_player->Check_for_win()){
+                    retry_for_first = false;
+                }
+
+                system("clear");
             }
-
-            first_player->Choose_coordinates_for_attack(curr_turn_row, curr_turn_column);
-            second_player->Get_Fire(curr_turn_row, curr_turn_column, first_player);
-
-            system("clear");
 
             if(second_player->Check_for_win())
             {
@@ -130,22 +136,27 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
                 break;
             }
 
-
-
             curr_turn_row = 0;
             curr_turn_column = 'Z';
 
-            std::cout << "\n=====================Player 2 turn=========================\n";
-            if(second_player->return_type_player() == console_player)
+
+            bool retry_for_second = true;
+            while (retry_for_second)
             {
-                std::cout << "============Player 1 don't look at the screen=================\n";
-                second_player->Print_attack_board(first_player);
+                std::cout << "\n=====================Player 2 turn=========================\n";
+                if(second_player->return_type_player() == console_player)
+                {
+                    std::cout << "============Player 1 don't look at the screen=================\n";
+                    second_player->Print_attack_board(first_player);
+                }
+
+                second_player->Choose_coordinates_for_attack(curr_turn_row, curr_turn_column);
+                if(first_player->Get_Fire(curr_turn_row, curr_turn_column, second_player) == miss || first_player->Check_for_win())
+                {
+                    retry_for_second = false;
+                }
+                system("clear");
             }
-
-            second_player->Choose_coordinates_for_attack(curr_turn_row, curr_turn_column);
-            first_player->Get_Fire(curr_turn_row, curr_turn_column, second_player);
-
-            system("clear");
 
             if(first_player->Check_for_win())
             {

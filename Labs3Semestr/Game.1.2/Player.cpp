@@ -272,7 +272,7 @@ bool Gamer::Check_for_win() {
     return count_ships == 0;
 }
 
-void Gamer::Get_Fire(int row, char column, Gamer *enemy) {
+Result_of_attack Gamer::Get_Fire(int row, char column, Gamer *enemy) {
     bool retry = true;//Повторная попытка если пользователь ввел координаты, которые уже проверял ранее
     while (retry)
     {
@@ -317,7 +317,7 @@ void Gamer::Get_Fire(int row, char column, Gamer *enemy) {
             std::cout << "CPU(optimal) have missed at position:[" << column << "][" << row << "]\n";
         }
         attackBoard[row][ConvertColumn(column)] = '#';//M - missed промах
-        return;
+        return miss;
     }
     else if(location == 'S')
     {
@@ -401,6 +401,7 @@ void Gamer::Get_Fire(int row, char column, Gamer *enemy) {
                 }
             }
         }
+        return hit;
     }
 }
 
