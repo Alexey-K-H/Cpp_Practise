@@ -13,7 +13,7 @@ void OptimalGamer::Add_ships(int number_of_ships) {
     std::cout << "Create optimal ships location..." << std::endl;
     for(unsigned long long i = 0; i < big_ship_size.size(); i++)
     {
-        shipDirection = 'V';//Все большие корабли расположим вертикально
+        shipDirection = 'V';//Все большие корабли расположим вертикально, вдоль границы карты
         int size = big_ship_size[i];
         if(size == 4)//Устанавливаем линкор
         {
@@ -102,7 +102,7 @@ void OptimalGamer::Add_ships(int number_of_ships) {
             }
         }
     }
-    //Устанавливаем случайным образом одноклеточные корабли 4 шт.
+    //Устанавливаем случайным образом одноклеточные корабли (4 шт).
     for(int i = 0; i < 4; i++)
     {
         bool correct_input = false;

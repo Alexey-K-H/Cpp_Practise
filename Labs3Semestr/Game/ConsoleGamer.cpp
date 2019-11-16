@@ -103,7 +103,7 @@ void ConsoleGamer::Add_ships(int number_of_ships) {
                 else
                 {
                     ship_size[size - 1]++;
-                    std::system("clear");
+                    system("clear");
                     std::cout << "Sorry, invalid coordinate.Try again!\n";
                     PrintBoard();
                 }
@@ -129,19 +129,19 @@ void ConsoleGamer::Add_ships(int number_of_ships) {
                 else
                 {
                     ship_size[size - 1]++;
-                    std::system("clear");
+                    system("clear");
                     std::cout << "Sorry, invalid coordinate.Try again!\n";
                     PrintBoard();
                 }
             }
             else{
                 ship_size[size - 1]++;
-                std::system("clear");
+                system("clear");
                 std::cout << "Error! Not a valid ship direction\n";
                 PrintBoard();
             }
         }
-        std::system("clear");
+        system("clear");
         PrintBoard();
     }
 }
