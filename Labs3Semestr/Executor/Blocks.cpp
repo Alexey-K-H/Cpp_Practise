@@ -14,13 +14,7 @@ IBlock* BlockFactory::Create(std::list<std::string>& block_description) {
     std::string key = *(block_description.begin());//Предполагается что первая строка в списке - имя блока
     auto i = makers.find(key);
     //Если команда не была определена
-    try {
-        if(i == makers.end())
-            throw std::invalid_argument("No such kind of command!");
-    }
-    catch (std::exception &err)
-    {
-        std::cerr << "Error:" << err.what() << std::endl;
+    if(i == makers.end()){
         return nullptr;
     }
     IBlockMaker* maker = i->second;
@@ -42,7 +36,7 @@ std::vector<std::string> Readfile::Do_command(std::vector<std::string>& some_tex
     input_file.open(in_name);
 
     if(!input_file.is_open()){
-            throw std::ios_base::failure("file doesn't exist");
+            throw std::invalid_argument("file doesn't exist");
     }
 
     text.clear();
@@ -75,7 +69,7 @@ std::vector<std::string> Writefile::Do_command(std::vector<std::string>& some_te
     output_file.open(out_name);
 
         if(!output_file.is_open())
-            throw std::ios_base::failure("file doesn't exist");
+            throw std::invalid_argument("file doesn't exist");
 
     for(const std::string& i : text){
         output_file << i << std::endl;
@@ -193,7 +187,7 @@ std::vector<std::string> Dump::Do_command(std::vector<std::string>& some_text){
     log_file.open(log_name);
 
     if(!log_file.is_open())
-            throw std::ios_base::failure("file doesn't exist");
+            throw std::invalid_argument("file doesn't exist");
 
     for(const std::string& i : text)
     {

@@ -11,7 +11,7 @@ void Executor::Check_order_of_blocks(std::string &order) {
     if(order.size() == 1)
     {
         if(!isdigit(order[0])){
-            throw std::ios_base::failure("No order of blocks!");
+            throw std::logic_error("No order of blocks!");
         }
         order_of_commands.push_back(atoi(&order[0]));
     }
@@ -36,7 +36,7 @@ void Executor::Check_order_of_blocks(std::string &order) {
     }
 
     if(count_nodes != count_commands - 1)
-        throw std::ios_base::failure("Incorrect order of blocks. Problems with nodes!");
+        throw std::logic_error("Incorrect order of blocks. Problems with nodes!");
 }
 
 int Executor::Execute_work()
@@ -48,8 +48,7 @@ int Executor::Execute_work()
     }
     catch (std::exception &err)
     {
-        std::cerr << "Error:" << err.what() << std::endl;
-        return -1;
+        throw std::logic_error(err.what());
     }
 
 
@@ -75,7 +74,7 @@ int Executor::Execute_work()
         }
         catch (std::exception &err)
         {
-            throw std::ios_base::failure(err.what());
+            throw std::logic_error(err.what());
         }
     }
     return 0;
