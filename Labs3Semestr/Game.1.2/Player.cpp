@@ -53,20 +53,6 @@ int Gamer::Get_count_of_ships() {
     return count_ships;
 }
 
-void Gamer::PrintBoard() {
-    std::cout << "\t\t<YOUR BOARD>" << std::endl;
-    std::cout << "   [A][B][C][D][E][F][G][H][I][J]\n";
-
-    for(int x = 0; x < rows; x++)
-    {
-        std::cout << "[" <<  x << "]";
-        for(int y = 0; y < columns; y++)
-        {
-            std::cout << " " << gameBoard[x][y] << " ";
-        }
-        std::cout << std::endl;
-    }
-}
 
 void Gamer::Print_attack_board(Gamer* enemy) {
     std::cout << "\t<ENEMY BOARD>\t\t\t<YOUR BOARD>" << std::endl;

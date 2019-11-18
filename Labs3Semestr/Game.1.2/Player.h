@@ -41,7 +41,6 @@ public:
     int Get_count_of_ships();//Количество кораблей игрока
     virtual void Add_ships(int number_of_ships) = 0;//Добавить корабли на карту
 
-    void PrintBoard();//Вывод поля игрока
     void Print_attack_board(Gamer* enemy);//Вывод поля для противника(места куда он стреляет)
     virtual void Choose_coordinates_for_attack(int &coord_row, char &coord_column) = 0;//Коррдинаты, которые игрок выбирает при своем ходе
 
@@ -61,6 +60,7 @@ class ConsoleGamer : public Gamer
 {
 public:
     Type_player return_type_player() override;
+    void PrintBoard();//Вывод поля игрока(Только для консольного при расстановке кораблей)
     void Add_ships(int number_of_ships) override;
     void Choose_coordinates_for_attack(int &coord_row, char &coord_column) override;//Выбор координат для атаки
     static void Row_coordinate(int &check_first_coordinate);//Ввод и проверка первой координаты при установке корабля

@@ -99,7 +99,6 @@ void OptimalGamer::Add_ships(int number_of_ships) {
                         tmp_ship.Add_coordinate(shipRow - j + 1, ConvertColumn(shipColumn));
                     }
                     player_ships.push_back(tmp_ship);
-                    PrintBoard();
                 }
                 else
                 {

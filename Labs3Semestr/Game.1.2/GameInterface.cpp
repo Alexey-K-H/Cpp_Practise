@@ -96,14 +96,19 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
         //начало игры
         int curr_turn_row = 0;
         char curr_turn_column = 'Z';
+        char next_turn = 'n';
         std::cout << "\t\tROUND<" << counter << ">\n";
 
         //Заполнение карт игроками
         std::cout << "\t\tPLAYER 1, ADD SHIPS ON YOUR MAP" << std::endl;
         first_player->Add_ships(first_player->Get_count_of_ships());
 
+        system("clear");
+
         std::cout << "\t\tPLAYER 2, ADD SHIPS ON YOUR MAP" << std::endl;
         second_player->Add_ships(second_player->Get_count_of_ships());
+
+        system("clear");
 
         while (true)
         {
@@ -121,8 +126,6 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
                 if(second_player->Get_Fire(curr_turn_row, curr_turn_column, first_player) == miss || second_player->Check_for_win()){
                     retry_for_first = false;
                 }
-
-                system("clear");
             }
 
             if(second_player->Check_for_win())
@@ -134,6 +137,13 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
                 std::cout << "CONGRATULATIONS!\n";
                 first_player->Print_attack_board(second_player);
                 break;
+            }
+
+            if(first_player->return_type_player() == console_player)
+            {
+                std::cout << "Press any key to continue:";
+                std::cin >> next_turn;
+                system("clear");
             }
 
             curr_turn_row = 0;
@@ -155,7 +165,6 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
                 {
                     retry_for_second = false;
                 }
-                system("clear");
             }
 
             if(first_player->Check_for_win())
@@ -169,6 +178,12 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
                 break;
             }
 
+            if(second_player->return_type_player() == console_player)
+            {
+                std::cout << "Press any key to continue:";
+                std::cin >> next_turn;
+                system("clear");
+            }
         }
         delete(first_player);
         delete(second_player);
