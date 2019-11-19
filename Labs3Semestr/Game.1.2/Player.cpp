@@ -268,7 +268,7 @@ Result_of_attack Gamer::Get_Fire(int row, char column, Gamer *enemy) {
             //Если в данной координате уже был допущен промах
             if(enemy->return_type_player() == console_player)
             {
-                std::cout << "You have already missed at this location! Please retry!\n";
+                std::cout << "YOU HAVE ALREADY MISSED AT THIS LOCATION! PLEASE RETRY!\n";
             }
             enemy->Choose_coordinates_for_attack(row, column);
             continue;
@@ -278,7 +278,7 @@ Result_of_attack Gamer::Get_Fire(int row, char column, Gamer *enemy) {
             //Если в данной позиции уже был нанесен удар или в ней обломки убитого корабля
             if(enemy->return_type_player() == console_player)
             {
-                std::cout << "You have already heated at this location! Please retry!\n";
+                std::cout << "YOU HAVE ALREADY HEATED AT THIS LOCATION! PLEASE RETRY!\n";
             }
             enemy->Choose_coordinates_for_attack(row, column);
             continue;
@@ -287,20 +287,21 @@ Result_of_attack Gamer::Get_Fire(int row, char column, Gamer *enemy) {
     }
 
     char location = Find(row, column);//Проверяем на карте с кораблями, куда попал удар
+    system("clear");
     if(location == '*')
     {
         //Пустая клетка
         if(enemy->return_type_player() == console_player)
         {
-            std::cout << "You have missed at position:[" << column << "][" << row << "]\n";
+            std::cout << "YOU HAVE MISSED AT POSITION:[" << column << "][" << row << "]\n";
         }
         else if(enemy->return_type_player() == random_player)
         {
-            std::cout << "CPU(random) have missed at position:[" << column << "][" << row << "]\n";
+            std::cout << "CPU(RANDOM) HAVE MISSED AT POSITION:[" << column << "][" << row << "]\n";
         }
         else if(enemy->return_type_player() == optimal_player)
         {
-            std::cout << "CPU(optimal) have missed at position:[" << column << "][" << row << "]\n";
+            std::cout << "CPU(OPTIMAL) HAVE MISSED AT POSITION:[" << column << "][" << row << "]\n";
         }
         attackBoard[row][ConvertColumn(column)] = '#';//M - missed промах
         return miss;
@@ -315,15 +316,15 @@ Result_of_attack Gamer::Get_Fire(int row, char column, Gamer *enemy) {
             {
                 if(enemy->return_type_player() == console_player)
                 {
-                    std::cout << "You hit at location:[" << column << "][" << row << "]\n";
+                    std::cout << "YOU HIT AT LOCATION:[" << column << "][" << row << "]\n";
                 }
                 else if(enemy->return_type_player() == random_player)
                 {
-                    std::cout << "CPU(random) hit at location:[" << column << "][" << row << "]\n";
+                    std::cout << "CPU(RANDOM) HIT AT LOCATION:[" << column << "][" << row << "]\n";
                 }
                 else if(enemy->return_type_player() == optimal_player)
                 {
-                    std::cout << "CPU(optimal) hit at location:[" << column << "][" << row << "]\n";
+                    std::cout << "CPU(OPTIMAL) HIT AT LOCATION:[" << column << "][" << row << "]\n";
                 }
 
                 attackBoard[row][ConvertColumn(column)] = 'H';//H - hit нанесен урон палубе
@@ -335,15 +336,15 @@ Result_of_attack Gamer::Get_Fire(int row, char column, Gamer *enemy) {
 
                     if(enemy->return_type_player() == console_player)
                     {
-                        std::cout << "You sunk a ship!\n";
+                        std::cout << "YOU SUNK A SHIP!\n";
                     }
                     else if(enemy->return_type_player() == random_player)
                     {
-                        std::cout << "CPU(random) sunk a ship!\n";
+                        std::cout << "CPU(RANDOM) SUNK A SHIP!\n";
                     }
                     else if(enemy->return_type_player() == optimal_player)
                     {
-                        std::cout << "CPU(optimal) sunk a ship!\n";
+                        std::cout << "CPU(OPTIMAL) SUNK A SHIP!\n";
                     }
 
                     std::vector<std::pair<int, int>> ship_coords = player_ship.ReturnCoordinates();

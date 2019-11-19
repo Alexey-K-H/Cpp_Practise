@@ -108,10 +108,9 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
         std::cout << "\t\tPLAYER 2, ADD SHIPS ON YOUR MAP" << std::endl;
         second_player->Add_ships(second_player->Get_count_of_ships());
 
-        system("clear");
-
         while (true)
         {
+            system("clear");
             bool retry_for_first = true;//Повторный ход, в случае если игрок нанес удар по кораблю или потопил его
             while (retry_for_first)
             {
@@ -141,9 +140,8 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
 
             if(first_player->return_type_player() == console_player)
             {
-                std::cout << "Press any key to continue:";
+                std::cout << "Turn of the next player. Press any key to continue:";
                 std::cin >> next_turn;
-                system("clear");
             }
 
             curr_turn_row = 0;
@@ -180,9 +178,8 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
 
             if(second_player->return_type_player() == console_player)
             {
-                std::cout << "Press any key to continue:";
+                std::cout << "Turn of the next player. Press any key to continue:";
                 std::cin >> next_turn;
-                system("clear");
             }
         }
         delete(first_player);

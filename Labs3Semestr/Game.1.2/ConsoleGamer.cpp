@@ -12,7 +12,7 @@ void ConsoleGamer::Row_coordinate(int &check_first_coordinate) {
     {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Error: Please enter a value (0 - 9):";
+        std::cout << "ERROR: PLEASE ENTER A VALUE (0 - 9):";
         std::cin >> check_first_coordinate;
     }
 }
@@ -26,7 +26,7 @@ void ConsoleGamer::Column_coordinate(char &check_second_coordinate) {
     {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Error: PLease enter a column character (A-J):";
+        std::cout << "ERROR: PLEASE ENTER A COLUMN CHARACTER (A-J):";
         std::cin >> check_second_coordinate;
         check_second_coordinate = (char)toupper(check_second_coordinate);
         tmp = int(check_second_coordinate);
@@ -174,19 +174,19 @@ void ConsoleGamer::Add_ships(int number_of_ships) {
                 if (!isdigit(curr_size)) {
                     std::cin.clear();
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    std::cout << "Wrong input for size, please print correct digit.\n";
+                    std::cout << "WRONG INPUT FOR SIZE, PLEASE PRINT CORRECT DIGIT.\n";
                 }
                 else {
                     size = std::stoi(&curr_size);
                     if (size < 0 || size > 4) {
                         std::cin.clear();
                         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                        std::cout << "Wrong input for size, please print correct digit.\n";
+                        std::cout << "WRONG INPUT FOR SIZE, PLEASE PRINT CORRECT DIGIT.\n";
                     }
                     else if (ship_size[size - 1] <= 0) {
                         std::cin.clear();
                         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                        std::cout << "You already used all ships of this type!" << std::endl;
+                        std::cout << "YOU ALREADY USED ALL SHIPS OF THIS TYPE!" << std::endl;
                     }
                     else {
                         ship_size[size - 1]--;
@@ -225,7 +225,7 @@ void ConsoleGamer::Add_ships(int number_of_ships) {
                 {
                     ship_size[size - 1]++;
                     system("clear");
-                    std::cout << "Sorry, invalid coordinate.Try again!\n";
+                    std::cout << "\nSORRY, INVALID COORDINATE.TRY AGAIN!\n";
                     PrintBoard();
                 }
             }
@@ -251,14 +251,14 @@ void ConsoleGamer::Add_ships(int number_of_ships) {
                 {
                     ship_size[size - 1]++;
                     system("clear");
-                    std::cout << "Sorry, invalid coordinate.Try again!\n";
+                    std::cout << "\nSORRY, INVALID COORDINATE.TRY AGAIN!\n";
                     PrintBoard();
                 }
             }
             else{
                 ship_size[size - 1]++;
                 system("clear");
-                std::cout << "Error! Not a valid ship direction\n";
+                std::cout << "\nERROR! NOT A VALID SHIP DIRECTION\n";
                 PrintBoard();
             }
         }
