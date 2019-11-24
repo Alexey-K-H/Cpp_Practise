@@ -140,10 +140,11 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
 
             if(first_player->return_type_player() == console_player)
             {
-                std::cout << "Turn of the next player. Press any key to continue:";
+                std::cout << "Turn of the next player. Enter any key to continue:";
                 std::cin >> next_turn;
             }
 
+            system("clear");
             curr_turn_row = 0;
             curr_turn_column = 'Z';
 
@@ -178,7 +179,7 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
 
             if(second_player->return_type_player() == console_player)
             {
-                std::cout << "Turn of the next player. Press any key to continue:";
+                std::cout << "Turn of the next player. Enter any key to continue:";
                 std::cin >> next_turn;
             }
         }

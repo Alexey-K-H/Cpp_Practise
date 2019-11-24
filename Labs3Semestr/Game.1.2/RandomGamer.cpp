@@ -16,6 +16,10 @@ void RandomGamer::Add_ships(int number_of_ships) {
         {
 
             int size = 0;
+            char shipDirection = '-';
+            int shipRow = 0;
+            char shipColumn;
+
             //Задаем рамер добавляемого корабля
             while(true) {
                 size = rand()%4 + 1;
@@ -31,7 +35,7 @@ void RandomGamer::Add_ships(int number_of_ships) {
             int dir = rand()%2 + 1;
             if(dir == 1)
                 shipDirection = 'H';
-            else
+            else if(dir == 2)
                 shipDirection = 'V';
 
 

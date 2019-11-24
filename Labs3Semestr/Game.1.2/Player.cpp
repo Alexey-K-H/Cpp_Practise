@@ -43,10 +43,6 @@ Gamer::Gamer() {
     ship_size.push_back(3);//ship_size[1] = 3
     ship_size.push_back(2);//ship_size[2] = 2
     ship_size.push_back(1);//ship_size[3] = 1
-
-    shipRow = 0;
-    shipColumn = '-';
-    shipDirection = '-';
 }
 
 int Gamer::Get_count_of_ships() {
@@ -124,7 +120,7 @@ int Gamer::ConvertColumn(char column) {
 
 
 //Проверка ввозможности разместить корабль
-bool Gamer::ValidCoordinate(int curr_shipRow, char curr_shipColumn, char direction, int size_of_ship) {
+bool Gamer::ValidCoordinate(const int curr_shipRow, const char curr_shipColumn, const char direction, const int size_of_ship) {
     int good_cords = 0;//Число правильных координат корабля, должно быть равно его размеру, если все корректно
     int tmp = int(curr_shipColumn);
     if((curr_shipRow >= 0 && curr_shipRow <= rows - 1) && (tmp >= 65 && tmp <= 74))
@@ -244,12 +240,12 @@ bool Gamer::ValidCoordinate(int curr_shipRow, char curr_shipColumn, char directi
 }
 
 
-char Gamer::Find_on_attack_board(int row, char column) {
+char Gamer::Find_on_attack_board(const int row, const char column) {
     int column_num = ConvertColumn(column);
     return (attackBoard[row][column_num]);
 }
 
-char Gamer::Find(int row, char column) {
+char Gamer::Find(const int row, const char column) {
     int column_num = ConvertColumn(column);
     return (gameBoard[row][column_num]);
 }

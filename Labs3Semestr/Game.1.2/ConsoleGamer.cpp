@@ -71,6 +71,11 @@ void ConsoleGamer::Add_ships(int number_of_ships) {
         std::cin >> is_rand;
     }
 
+    int size = 0;
+    char shipDirection = '-';
+    int shipRow = 0;
+    char shipColumn;
+
     if(is_rand == 'y')
     {
         std::cout << "Create random ships location..." << std::endl;
@@ -79,8 +84,6 @@ void ConsoleGamer::Add_ships(int number_of_ships) {
             bool correct_input = false;
             while (!correct_input)
             {
-
-                int size = 0;
                 //Задаем рамер добавляемого корабля
                 while(true) {
                     size = rand()%4 + 1;
@@ -96,7 +99,7 @@ void ConsoleGamer::Add_ships(int number_of_ships) {
                 int dir = rand()%2 + 1;
                 if(dir == 1)
                     shipDirection = 'H';
-                else
+                else if(dir == 2)
                     shipDirection = 'V';
 
 
@@ -165,7 +168,6 @@ void ConsoleGamer::Add_ships(int number_of_ships) {
                 std::cout << "Ship count (size:" << s + 1 << "): " << ship_size[s] << std::endl;
             }
 
-            int size = 0;
             //Задаем рамер добавляемого корабля
             while(true) {
                 char curr_size;

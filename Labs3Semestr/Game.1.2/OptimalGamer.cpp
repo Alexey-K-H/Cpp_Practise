@@ -14,6 +14,10 @@ void OptimalGamer::Add_ships(int number_of_ships) {
         while (!correct_input)
         {
             int size = 0;
+            char shipDirection = '-';
+            int shipRow = 0;
+            char shipColumn;
+
             //Задаем рамер добавляемого корабля
             while(true) {
                 size = rand()%4 + 1;
@@ -29,7 +33,7 @@ void OptimalGamer::Add_ships(int number_of_ships) {
             int dir = rand()%2 + 1;
             if(dir == 1)
                 shipDirection = 'H';
-            else
+            else if(dir == 2)
                 shipDirection = 'V';
 
 

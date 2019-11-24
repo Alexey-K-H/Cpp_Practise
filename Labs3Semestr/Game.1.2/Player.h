@@ -29,10 +29,7 @@ protected:
     char gameBoard[rows][columns];
     char attackBoard[rows][columns];
     std::vector<Ship> player_ships;//Корабли игрока
-    char shipDirection;//Положение конкретного корабля (вериткальное или горизонтальное)
-    int shipRow;
-    char shipColumn;
-    std::vector<int> ship_size;//Содержит размеры кораблей и соответствующее им количество кораблей
+    std::vector<int> ship_size;//Содержит размеры кораблей и соответствующее им количество кораблей данного размера
 public:
     Gamer();
     virtual ~Gamer()= default;;
