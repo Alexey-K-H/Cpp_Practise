@@ -10,14 +10,16 @@
 #include <sstream>
 
 //Разбить строку на несколько строк с учетом символа-разделителя
-std::vector<std::string> divideString(std::string &str, char character){
+std::vector<std::string> divideString(std::string &str, char column_delimiter){
     std::vector<std::string> result;
     size_t k = 0;
     size_t i;
 
+    std::string sub_str;
+
     for(i = 0; i < str.length();i++)
     {
-        if(str[i] == character){
+        if(str[i] == column_delimiter){
             result.push_back(str.substr(i - k, k));
             k = 0;
         }
@@ -28,7 +30,7 @@ std::vector<std::string> divideString(std::string &str, char character){
     }
 
     if(k > 0){
-        result.push_back(str.substr(i-k,k));
+        result.push_back(str.substr(i - k, k));
     }
 
     return result;

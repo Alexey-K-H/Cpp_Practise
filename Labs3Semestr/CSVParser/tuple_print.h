@@ -8,7 +8,7 @@
 template <typename Tuple, unsigned N, unsigned Size>
 struct tuple_print{
     static void print(std::ostream& out, const Tuple& tuple){
-        out << std::get<N>(tuple) << " ";
+        out << "\"" << std::get<N>(tuple) << "\";";
         tuple_print<Tuple, N + 1, Size>::print(out, tuple);
     }
 };
@@ -16,7 +16,7 @@ struct tuple_print{
 template <typename Tuple, unsigned N>
 struct tuple_print<Tuple, N, N>{
     static void print(std::ostream& out, const Tuple& tuple){
-        out << std::get<N>(tuple);
+        out << "\"" << std::get<N>(tuple) << "\";";
     }
 };
 
