@@ -9,21 +9,30 @@
 
 #include "parser_error.h"
 
+template<typename T> T from_string(const std::string &str, int N, int curr_row)
+{
+    std::stringstream ss(str);
+
+    if(ss.fail()){
+        throw type_mismatch("Type mismatch, problems in position", N, curr_row);
+    }
+    T t;
+    ss >> t;
+    return t;
+}
+
+template<> std::string from_string(const std::string &str, int N, int curr_row)
+{
+    return str;
+}
+
 //Заполнение последовательности N - индекс элемента последовательности (0 < N < Size(Argc))
 template <typename Tuple, unsigned N, unsigned Size>
 struct fillTuple{
     static void fill(Tuple &tuple, const std::vector<std::string> &vector, int curr_row){
-        std::stringstream str_stream;
-
-        str_stream << vector[N];
-        str_stream >> std::get<N>(tuple);
-
-        if(str_stream.fail()){
-            throw type_mismatch("Type mismatch, problems in position", N, curr_row);
-        }
-
-        //Проверяем следующий шаг
         try {
+            std::get<N>(tuple) = from_string<int>(vector[N], N, curr_row);
+            //Проверяем следующий шаг
             fillTuple<Tuple, N + 1, Size>::fill(tuple, vector, curr_row);
         }
         catch (type_mismatch &err){
@@ -36,14 +45,7 @@ struct fillTuple{
 template <typename Tuple, unsigned N>
 struct fillTuple<Tuple, N, N>{
     static void fill(Tuple &tuple, const std::vector<std::string> &vector, int curr_row){
-        std::stringstream str_stream;
-
-        str_stream << vector[N];
-        str_stream >> std::get<N>(tuple);
-
-        if(str_stream.fail()){
-            throw type_mismatch("Type mismatch, problems in position", N, curr_row);
-        }
+        std::get<N>(tuple) = from_string<std::string>(vector[N], N, curr_row);
     }
 };
 
