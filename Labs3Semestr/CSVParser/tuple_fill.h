@@ -11,13 +11,14 @@
 
 template<typename T> T from_string(const std::string &str, int N, int curr_row)
 {
-    std::stringstream ss(str);
-
+    std::stringstream ss;
+    ss << str;
+    T t;
+    ss >> t;
+    
     if(ss.fail()){
         throw type_mismatch("Type mismatch, problems in position", N, curr_row);
     }
-    T t;
-    ss >> t;
     return t;
 }
 
