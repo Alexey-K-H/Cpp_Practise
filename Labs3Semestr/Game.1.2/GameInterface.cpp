@@ -1,6 +1,6 @@
 #include "GameInterface.h"
 
-void Manual(){
+void Game_Interface::Manual(){
     std::cout << "\t\t<Manual>\t\t" << std::endl;
     std::cout << "There are three parameters that you can change:" << std::endl;
     std::cout << "Count of the rounds (Default:1)" << std::endl;
@@ -14,7 +14,7 @@ void Manual(){
     std::cout << "<End of the tutorial>" << std::endl;
 }
 
-void Print_stats(int &first_wins, int &second_wins, int &count_rounds){
+void Game_Interface::Print_stats(int &first_wins, int &second_wins, int &count_rounds){
     std::cout << "\n\n====================GENERAL STATISTICS=============================================\n";
     std::cout << "COUNT OF THE ROUNDS:" << count_rounds << "\n\n";
     std::cout << "PLAYER1: Rounds win <" << first_wins << ">; Rounds fail <" << count_rounds - first_wins << ">\n";
@@ -34,7 +34,7 @@ void Print_stats(int &first_wins, int &second_wins, int &count_rounds){
     }
 }
 
-Type_player define_type_of_player(const char *curr_type){
+Type_player Game_Interface::define_type_of_player(const char *curr_type){
 
     if(strcmp(curr_type, "random") == 0){
         return random_player;
@@ -51,7 +51,7 @@ Type_player define_type_of_player(const char *curr_type){
     return random_player;
 }
 
-std::string Print_type(Type_player &type){
+std::string Game_Interface::Print_type(Type_player &type){
     switch (type)
     {
         case console_player:
@@ -63,7 +63,7 @@ std::string Print_type(Type_player &type){
     }
 }
 
-Gamer* createGamer(Type_player &type){
+Gamer* Game_Interface::createGamer(Type_player &type){
     Gamer *p = nullptr;
     switch (type)
     {
@@ -80,8 +80,154 @@ Gamer* createGamer(Type_player &type){
     return p;
 }
 
-void Game_process(int &count_of_rounds, Type_player &first, Type_player &second){
+void Game_Interface::Print_player_and_attack_board(Gamer *player) {
+    std::cout << "\t<ENEMY BOARD>\t\t\t<YOUR BOARD>" << std::endl;
+    std::cout << "   ";
+    int name_column = 0;
+    for(int i = 0; i < COLUMNS; i++){
+        std::cout << "[" << (char)(name_column + 65 + i) << "]";
+    }
+    std::cout << "      ";
+    for(int i = 0; i < COLUMNS; i++){
+        std::cout << "[" << (char)(name_column + 65 + i) << "]";
+    }
+    std::cout << std::endl;
 
+    for(int x = 0; x < ROWS; x++)
+    {
+        std::cout << "[" <<  x << "]";
+        for(int y = 0; y < COLUMNS; y++)
+        {
+            std::cout << " " << player->attackBoard[x][y] << " ";
+        }
+        std::cout << "   [" << x << "]";
+        for(int y = 0; y < COLUMNS; y++)
+        {
+            std::cout << " " << player->gameBoard[x][y] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
+char Game_Interface::Find_on_board(Gamer *player, const int row, const char column) {
+    int column_board = ConvertColumn(column);
+    return (player->gameBoard[row][column_board]);
+}
+
+Result_of_attack Game_Interface::get_fire(Gamer *player, Gamer *enemy, int row, char column) {
+    char location = Find_on_board(player, row, column);
+    system("clear");
+    if(location == '*')
+    {
+        //Пустая клетка
+        if(enemy->return_type_player() == console_player)
+        {
+            std::cout << "YOU HAVE MISSED AT POSITION:[" << column << "][" << row << "]\n";
+        }
+        else if(enemy->return_type_player() == random_player)
+        {
+            std::cout << "CPU(RANDOM) HAVE MISSED AT POSITION:[" << column << "][" << row << "]\n";
+        }
+        else if(enemy->return_type_player() == optimal_player)
+        {
+            std::cout << "CPU(OPTIMAL) HAVE MISSED AT POSITION:[" << column << "][" << row << "]\n";
+        }
+        enemy->attackBoard[row][ConvertColumn(column)] = '#';//M - missed промах
+    }
+    else if(location == 'S')
+    {
+        //Палуба корабля
+        //Проверяем в какой из кораблей мы попали
+        for(auto & player_ship : player->player_ships)
+        {
+            if(player_ship.Check_for_hit(row, ConvertColumn(column)))
+            {
+                if(enemy->return_type_player() == console_player)
+                {
+                    std::cout << "YOU HIT AT LOCATION:[" << column << "][" << row << "]\n";
+                }
+                else if(enemy->return_type_player() == random_player)
+                {
+                    std::cout << "CPU(RANDOM) HIT AT LOCATION:[" << column << "][" << row << "]\n";
+                }
+                else if(enemy->return_type_player() == optimal_player)
+                {
+                    std::cout << "CPU(OPTIMAL) HIT AT LOCATION:[" << column << "][" << row << "]\n";
+                }
+
+                enemy->attackBoard[row][ConvertColumn(column)] = 'H';//H - hit нанесен урон палубе
+                player->gameBoard[row][ConvertColumn(column)] = 'H';
+                //Если это была последняя палуба корабля
+                if(player_ship.Get_length() == 0)
+                {
+                    player->count_ships--;
+
+                    if(enemy->return_type_player() == console_player)
+                    {
+                        std::cout << "YOU SUNK A SHIP!\n";
+                    }
+                    else if(enemy->return_type_player() == random_player)
+                    {
+                        std::cout << "CPU(RANDOM) SUNK A SHIP!\n";
+                    }
+                    else if(enemy->return_type_player() == optimal_player)
+                    {
+                        std::cout << "CPU(OPTIMAL) SUNK A SHIP!\n";
+                    }
+
+                    std::vector<std::pair<int, int>> ship_coords = player_ship.ReturnCoordinates();
+                    for(auto & ship_coord : ship_coords)
+                    {
+                        player->gameBoard[ship_coord.first][ship_coord.second] = 'X';
+                        enemy->attackBoard[ship_coord.first][ship_coord.second] = 'X';
+
+                        if(enemy->return_type_player() == optimal_player)
+                        {
+                            //Клетки окружения уничтоженного корабля рассматриваться не будут в дальнейшем (если противник наносивший удар умный ИИ)
+                            if(ship_coord.first - 1 >= 0 && enemy->attackBoard[ship_coord.first - 1][ship_coord.second] != 'X')
+                            {
+                                enemy->attackBoard[ship_coord.first - 1][ship_coord.second] = 'O';
+
+                                if(ship_coord.second + 1 <= COLUMNS - 1 && enemy->attackBoard[ship_coord.first - 1][ship_coord.second + 1] != 'X')
+                                    enemy->attackBoard[ship_coord.first - 1][ship_coord.second + 1] = 'O';
+
+                                if(ship_coord.second - 1 >= 0 && enemy->attackBoard[ship_coord.first - 1][ship_coord.second - 1] != 'X')
+                                    enemy->attackBoard[ship_coord.first - 1][ship_coord.second - 1] = 'O';
+                            }
+
+                            if(ship_coord.first + 1 <= ROWS - 1 && enemy->attackBoard[ship_coord.first + 1][ship_coord.second] != 'X')
+                            {
+                                enemy->attackBoard[ship_coord.first + 1][ship_coord.second] = 'O';
+
+                                if(ship_coord.second + 1 <= COLUMNS - 1 && enemy->attackBoard[ship_coord.first][ship_coord.second + 1] != 'X')
+                                    enemy->attackBoard[ship_coord.first + 1][ship_coord.second + 1] = 'O';
+
+                                if(ship_coord.second - 1 >= 0 && enemy->attackBoard[ship_coord.first][ship_coord.second - 1] != 'X')
+                                    enemy->attackBoard[ship_coord.first + 1][ship_coord.second - 1] = 'O';
+                            }
+
+                            if(ship_coord.second + 1 <= COLUMNS - 1 && enemy->attackBoard[ship_coord.first][ship_coord.second + 1] != 'X')
+                                enemy->attackBoard[ship_coord.first][ship_coord.second + 1] = 'O';
+
+                            if(ship_coord.second - 1 >= 0 && enemy->attackBoard[ship_coord.first][ship_coord.second - 1] != 'X')
+                                enemy->attackBoard[ship_coord.first][ship_coord.second - 1] = 'O';
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if(location == '*')
+        return miss;
+    else
+        return hit;
+}
+
+bool Game_Interface::Check_for_defeat(Gamer *curr_player) {
+    return curr_player->Get_count_of_ships() == 0;
+}
+
+void Game_Interface::Game_process(int &count_of_rounds, Type_player &first, Type_player &second){
     std::cout << "\t\t<Let's start!>" << std::endl;
     srand(time(nullptr));
     int counter = 1;
@@ -115,26 +261,25 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
             while (retry_for_first)
             {
                 std::cout << "\n=====================Player 1 turn=========================\n";
-
                 if(first_player->return_type_player() == console_player){
                     std::cout << "============Player 2 don't look at the screen=================\n";
-                    first_player->Print_attack_board(second_player);
+                    Print_player_and_attack_board(first_player);
                 }
 
                 first_player->Choose_coordinates_for_attack(curr_turn_row, curr_turn_column);
-                if(second_player->Get_Fire(curr_turn_row, curr_turn_column, first_player) == miss || second_player->Check_for_win()){
+                if(get_fire(second_player, first_player, curr_turn_row, curr_turn_column) == miss || Check_for_defeat(second_player)){
                     retry_for_first = false;
                 }
             }
 
-            if(second_player->Check_for_win())
+            if(Check_for_defeat(second_player))
             {
                 system("clear");
                 std::cout << "PLAYER1 SUNK ALL SHIPS OF PLAYER2! PLAYER1 WINS ROUND" << counter << "!!!\n";
                 counter++;
                 first_player_streak++;
                 std::cout << "CONGRATULATIONS!\n";
-                first_player->Print_attack_board(second_player);
+                Print_player_and_attack_board(first_player);
                 break;
             }
 
@@ -156,24 +301,24 @@ void Game_process(int &count_of_rounds, Type_player &first, Type_player &second)
                 if(second_player->return_type_player() == console_player)
                 {
                     std::cout << "============Player 1 don't look at the screen=================\n";
-                    second_player->Print_attack_board(first_player);
+                    Print_player_and_attack_board(second_player);
                 }
 
                 second_player->Choose_coordinates_for_attack(curr_turn_row, curr_turn_column);
-                if(first_player->Get_Fire(curr_turn_row, curr_turn_column, second_player) == miss || first_player->Check_for_win())
+                if(get_fire(first_player, second_player, curr_turn_row, curr_turn_column) == miss || Check_for_defeat(first_player))
                 {
                     retry_for_second = false;
                 }
             }
 
-            if(first_player->Check_for_win())
+            if(Check_for_defeat(first_player))
             {
                 system("clear");
                 std::cout << "PLAYER2 SUNK ALL SHIPS OF PLAYER1! PLAYER2 WINS ROUND" << counter << "!!!\n";
                 counter++;
                 second_player_streak++;
                 std::cout << "CONGRATULATIONS!\n";
-                second_player->Print_attack_board(first_player);
+                Print_player_and_attack_board(second_player);
                 break;
             }
 

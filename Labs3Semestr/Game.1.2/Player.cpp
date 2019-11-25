@@ -29,10 +29,9 @@ char Define_name_column_by_num(int &num) {
 }
 
 Gamer::Gamer() {
-    //Создаем поле для игрока
-    for(int x = 0; x < rows; x++)
+    for(int x = 0; x < ROWS; x++)
     {
-        for(int y = 0; y < columns; y++)
+        for(int y = 0; y < COLUMNS; y++)
         {
             gameBoard[x][y] = '*';
             attackBoard[x][y] = '*';
@@ -49,39 +48,8 @@ int Gamer::Get_count_of_ships() {
     return count_ships;
 }
 
-
-void Gamer::Print_attack_board(Gamer* enemy) {
-    std::cout << "\t<ENEMY BOARD>\t\t\t<YOUR BOARD>" << std::endl;
-    std::cout << "   ";
-    int name_column = 0;
-    for(int i = 0; i < columns; i++){
-        std::cout << "[" << (char)(name_column + 65 + i) << "]";
-    }
-    std::cout << "      ";
-    for(int i = 0; i < columns; i++){
-        std::cout << "[" << (char)(name_column + 65 + i) << "]";
-    }
-    std::cout << std::endl;
-
-    for(int x = 0; x < rows; x++)
-    {
-        std::cout << "[" <<  x << "]";
-        for(int y = 0; y < columns; y++)
-        {
-            std::cout << " " << enemy->attackBoard[x][y] << " ";
-        }
-        std::cout << "   [" << x << "]";
-        for(int y = 0; y < columns; y++)
-        {
-            std::cout << " " << gameBoard[x][y] << " ";
-        }
-        std::cout << std::endl;
-    }
-}
-
-
 //Определить по букве положение в массиве
-int Gamer::ConvertColumn(char column) {
+int ConvertColumn(char column) {
     switch (column){
         case 'A':{
             return 0;
@@ -118,16 +86,15 @@ int Gamer::ConvertColumn(char column) {
     }
 }
 
-
-//Проверка ввозможности разместить корабль
+//Проверка возможности разместить корабль
 bool Gamer::ValidCoordinate(const int curr_shipRow, const char curr_shipColumn, const char direction, const int size_of_ship) {
     int good_cords = 0;//Число правильных координат корабля, должно быть равно его размеру, если все корректно
     int tmp = int(curr_shipColumn);
-    if((curr_shipRow >= 0 && curr_shipRow <= rows - 1) && (tmp >= 65 && tmp <= 74))
+    if((curr_shipRow >= 0 && curr_shipRow <= ROWS - 1) && (tmp >= 65 && tmp <= 74))
     {
         if(direction == 'H')
         {
-            for (int i = 1; (i <= size_of_ship) && (ConvertColumn(curr_shipColumn) + i - 1 < columns); i++){
+            for (int i = 1; (i <= size_of_ship) && (ConvertColumn(curr_shipColumn) + i - 1 < COLUMNS); i++){
                 if (gameBoard[curr_shipRow][(ConvertColumn(curr_shipColumn)) + i - 1] == '*')
                     good_cords++;
 
@@ -137,7 +104,7 @@ bool Gamer::ValidCoordinate(const int curr_shipRow, const char curr_shipColumn, 
                         good_cords--;
                 }
 
-                if(curr_shipRow + 1 <= rows - 1)
+                if(curr_shipRow + 1 <= ROWS - 1)
                 {
                     if(gameBoard[curr_shipRow + 1][(ConvertColumn(curr_shipColumn)) + i - 1] != '*')
                         good_cords--;
@@ -155,14 +122,14 @@ bool Gamer::ValidCoordinate(const int curr_shipRow, const char curr_shipColumn, 
                         good_cords--;
                 }
 
-                if(curr_shipRow + 1 <= rows - 1)
+                if(curr_shipRow + 1 <= ROWS - 1)
                 {
                     if(gameBoard[curr_shipRow + 1][(ConvertColumn(curr_shipColumn)) - 1] != '*')
                         good_cords--;
                 }
             }
 
-            if(ConvertColumn(curr_shipColumn) + size_of_ship <= columns - 1)
+            if(ConvertColumn(curr_shipColumn) + size_of_ship <= COLUMNS - 1)
             {
                 if(gameBoard[curr_shipRow][(ConvertColumn(curr_shipColumn)) + size_of_ship] != '*')
                     good_cords--;
@@ -173,7 +140,7 @@ bool Gamer::ValidCoordinate(const int curr_shipRow, const char curr_shipColumn, 
                         good_cords--;
                 }
 
-                if(curr_shipRow + 1 <= rows - 1)
+                if(curr_shipRow + 1 <= ROWS - 1)
                 {
                     if(gameBoard[curr_shipRow + 1][(ConvertColumn(curr_shipColumn)) + size_of_ship] != '*')
                         good_cords--;
@@ -192,7 +159,7 @@ bool Gamer::ValidCoordinate(const int curr_shipRow, const char curr_shipColumn, 
                         good_cords--;
                 }
 
-                if(ConvertColumn(curr_shipColumn) + 1 <= columns - 1)
+                if(ConvertColumn(curr_shipColumn) + 1 <= COLUMNS - 1)
                 {
                     if (gameBoard[curr_shipRow-i+1][ConvertColumn(curr_shipColumn) + 1] != '*')
                         good_cords--;
@@ -210,14 +177,14 @@ bool Gamer::ValidCoordinate(const int curr_shipRow, const char curr_shipColumn, 
                         good_cords--;
                 }
 
-                if(ConvertColumn(curr_shipColumn) + 1 <= columns - 1)
+                if(ConvertColumn(curr_shipColumn) + 1 <= COLUMNS - 1)
                 {
                     if (gameBoard[curr_shipRow - size_of_ship][ConvertColumn(curr_shipColumn) + 1] != '*')
                         good_cords--;
                 }
             }
 
-            if(curr_shipRow + 1 <= rows - 1)
+            if(curr_shipRow + 1 <= ROWS - 1)
             {
                 if (gameBoard[curr_shipRow + 1][ConvertColumn(curr_shipColumn)] != '*')
                     good_cords--;
@@ -228,7 +195,7 @@ bool Gamer::ValidCoordinate(const int curr_shipRow, const char curr_shipColumn, 
                         good_cords--;
                 }
 
-                if(ConvertColumn(curr_shipColumn) + 1 <= columns - 1)
+                if(ConvertColumn(curr_shipColumn) + 1 <= COLUMNS - 1)
                 {
                     if (gameBoard[curr_shipRow + 1][ConvertColumn(curr_shipColumn) + 1] != '*')
                         good_cords--;
@@ -238,153 +205,3 @@ bool Gamer::ValidCoordinate(const int curr_shipRow, const char curr_shipColumn, 
     }
     return good_cords == size_of_ship;
 }
-
-
-char Gamer::Find_on_attack_board(const int row, const char column) {
-    int column_num = ConvertColumn(column);
-    return (attackBoard[row][column_num]);
-}
-
-char Gamer::Find(const int row, const char column) {
-    int column_num = ConvertColumn(column);
-    return (gameBoard[row][column_num]);
-}
-
-bool Gamer::Check_for_win() {
-    return count_ships == 0;
-}
-
-Result_of_attack Gamer::Get_Fire(int row, char column, Gamer *enemy) {
-    bool retry = true;//Повторная попытка если пользователь ввел координаты, которые уже проверял ранее
-    while (retry)
-    {
-        char PotentialRetry = Find_on_attack_board(row, column);//Ищем введенные координаты на поле противника
-        if(PotentialRetry == '#' || (PotentialRetry == 'O' && enemy->return_type_player() == optimal_player))
-        {
-            //Если в данной координате уже был допущен промах
-            if(enemy->return_type_player() == console_player)
-            {
-                std::cout << "YOU HAVE ALREADY MISSED AT THIS LOCATION! PLEASE RETRY!\n";
-            }
-            enemy->Choose_coordinates_for_attack(row, column);
-            continue;
-        }
-        if(PotentialRetry == 'H' || PotentialRetry == 'X')
-        {
-            //Если в данной позиции уже был нанесен удар или в ней обломки убитого корабля
-            if(enemy->return_type_player() == console_player)
-            {
-                std::cout << "YOU HAVE ALREADY HEATED AT THIS LOCATION! PLEASE RETRY!\n";
-            }
-            enemy->Choose_coordinates_for_attack(row, column);
-            continue;
-        }
-        retry = false;
-    }
-
-    char location = Find(row, column);//Проверяем на карте с кораблями, куда попал удар
-    system("clear");
-    if(location == '*')
-    {
-        //Пустая клетка
-        if(enemy->return_type_player() == console_player)
-        {
-            std::cout << "YOU HAVE MISSED AT POSITION:[" << column << "][" << row << "]\n";
-        }
-        else if(enemy->return_type_player() == random_player)
-        {
-            std::cout << "CPU(RANDOM) HAVE MISSED AT POSITION:[" << column << "][" << row << "]\n";
-        }
-        else if(enemy->return_type_player() == optimal_player)
-        {
-            std::cout << "CPU(OPTIMAL) HAVE MISSED AT POSITION:[" << column << "][" << row << "]\n";
-        }
-        attackBoard[row][ConvertColumn(column)] = '#';//M - missed промах
-        return miss;
-    }
-    else if(location == 'S')
-    {
-        //Палуба корабля
-        //Проверяем в какой из кораблей мы попали
-        for(auto & player_ship : player_ships)
-        {
-            if(player_ship.Check_for_hit(row, ConvertColumn(column)))
-            {
-                if(enemy->return_type_player() == console_player)
-                {
-                    std::cout << "YOU HIT AT LOCATION:[" << column << "][" << row << "]\n";
-                }
-                else if(enemy->return_type_player() == random_player)
-                {
-                    std::cout << "CPU(RANDOM) HIT AT LOCATION:[" << column << "][" << row << "]\n";
-                }
-                else if(enemy->return_type_player() == optimal_player)
-                {
-                    std::cout << "CPU(OPTIMAL) HIT AT LOCATION:[" << column << "][" << row << "]\n";
-                }
-
-                attackBoard[row][ConvertColumn(column)] = 'H';//H - hit нанесен урон палубе
-                gameBoard[row][ConvertColumn(column)] = 'H';
-                //Если это была последняя палуба корабля
-                if(player_ship.Get_length() == 0)
-                {
-                    count_ships--;
-
-                    if(enemy->return_type_player() == console_player)
-                    {
-                        std::cout << "YOU SUNK A SHIP!\n";
-                    }
-                    else if(enemy->return_type_player() == random_player)
-                    {
-                        std::cout << "CPU(RANDOM) SUNK A SHIP!\n";
-                    }
-                    else if(enemy->return_type_player() == optimal_player)
-                    {
-                        std::cout << "CPU(OPTIMAL) SUNK A SHIP!\n";
-                    }
-
-                    std::vector<std::pair<int, int>> ship_coords = player_ship.ReturnCoordinates();
-                    for(auto & ship_coord : ship_coords)
-                    {
-                        gameBoard[ship_coord.first][ship_coord.second] = 'X';
-                        attackBoard[ship_coord.first][ship_coord.second] = 'X';
-
-                        if(enemy->return_type_player() == optimal_player)
-                        {
-                            //Клетки окружения уничтоженного корабля рассматриваться не будут в дальнейшем (если противник наносивший удар умный ИИ)
-                            if(ship_coord.first - 1 >= 0 && attackBoard[ship_coord.first - 1][ship_coord.second] != 'X')
-                            {
-                                attackBoard[ship_coord.first - 1][ship_coord.second] = 'O';
-
-                                if(ship_coord.second + 1 <= columns - 1 && attackBoard[ship_coord.first - 1][ship_coord.second + 1] != 'X')
-                                    attackBoard[ship_coord.first - 1][ship_coord.second + 1] = 'O';
-
-                                if(ship_coord.second - 1 >= 0 && attackBoard[ship_coord.first - 1][ship_coord.second - 1] != 'X')
-                                    attackBoard[ship_coord.first - 1][ship_coord.second - 1] = 'O';
-                            }
-
-                            if(ship_coord.first + 1 <= rows - 1 && attackBoard[ship_coord.first + 1][ship_coord.second] != 'X')
-                            {
-                                attackBoard[ship_coord.first + 1][ship_coord.second] = 'O';
-
-                                if(ship_coord.second + 1 <= columns - 1 && attackBoard[ship_coord.first][ship_coord.second + 1] != 'X')
-                                    attackBoard[ship_coord.first + 1][ship_coord.second + 1] = 'O';
-
-                                if(ship_coord.second - 1 >= 0 && attackBoard[ship_coord.first][ship_coord.second - 1] != 'X')
-                                    attackBoard[ship_coord.first + 1][ship_coord.second - 1] = 'O';
-                            }
-
-                            if(ship_coord.second + 1 <= columns - 1 && attackBoard[ship_coord.first][ship_coord.second + 1] != 'X')
-                                attackBoard[ship_coord.first][ship_coord.second + 1] = 'O';
-
-                            if(ship_coord.second - 1 >= 0 && attackBoard[ship_coord.first][ship_coord.second - 1] != 'X')
-                                attackBoard[ship_coord.first][ship_coord.second - 1] = 'O';
-                        }
-                    }
-                }
-            }
-        }
-        return hit;
-    }
-}
-

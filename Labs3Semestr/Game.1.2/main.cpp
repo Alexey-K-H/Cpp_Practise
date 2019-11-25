@@ -9,6 +9,8 @@ int main(int argc, char **argv) {
 
     int count_of_rounds = 1;
 
+    Game_Interface interface;
+
     //Разбор аргументов командной строки
     int c;
     while (true)
@@ -27,7 +29,7 @@ int main(int argc, char **argv) {
         switch (c)
         {
             case 'h':{
-                Manual();
+                interface.Manual();
                 return 1;
             }
 
@@ -37,12 +39,12 @@ int main(int argc, char **argv) {
             }
 
             case 'f':{
-                first_player_type = define_type_of_player(optarg);
+                first_player_type = interface.define_type_of_player(optarg);
                 break;
             }
 
             case 's':{
-                second_player_type = define_type_of_player(optarg);
+                second_player_type = interface.define_type_of_player(optarg);
                 break;
             }
             default:{
@@ -53,11 +55,11 @@ int main(int argc, char **argv) {
 
     std::cout << "\n\tWelcome to ShipBattle!\n";
     std::cout << "\tCount of the rounds:" << count_of_rounds << "\n" << std::endl;
-    std::cout << "\tFirst player type:" << Print_type(first_player_type) << std::endl;
-    std::cout << "\tSecond player type:" << Print_type(second_player_type) << std::endl;
+    std::cout << "\tFirst player type:" << interface.Print_type(first_player_type) << std::endl;
+    std::cout << "\tSecond player type:" << interface.Print_type(second_player_type) << std::endl;
     std::cout << "\n\n" << std::endl;
 
-    Game_process(count_of_rounds, first_player_type, second_player_type);
+    interface.Game_process(count_of_rounds, first_player_type, second_player_type);
 
     return 0;
 }

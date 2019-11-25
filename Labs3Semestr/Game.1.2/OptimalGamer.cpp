@@ -48,7 +48,7 @@ void OptimalGamer::Add_ships(int number_of_ships) {
                     if(choose_limits == 1)
                         shipRow = 0;
                     else
-                        shipRow = rows - 1;
+                        shipRow = ROWS - 1;
                 }
                 else
                 {
@@ -84,7 +84,7 @@ void OptimalGamer::Add_ships(int number_of_ships) {
                     if(choose_limits == 1)
                         shipColumn = 'A';
                     else
-                        shipColumn = (char)(65 + columns - 1);
+                        shipColumn = (char)(65 + COLUMNS - 1);
                 }
                 else{
                     shipRow = 2 + rand()%6;
@@ -120,4 +120,20 @@ void OptimalGamer::Choose_coordinates_for_attack(int &coord_row, char &coord_col
     coord_row = rand()%10;
     int Column_num = rand()%10;
     coord_column = Define_name_column_by_num(Column_num);
+
+    bool retry = true;
+    while (retry)
+    {
+        if(attackBoard[coord_row][ConvertColumn(coord_column)] == '#' ||
+           attackBoard[coord_row][ConvertColumn(coord_column)] == 'O' ||
+           attackBoard[coord_row][ConvertColumn(coord_column)] == 'X' ||
+           attackBoard[coord_row][ConvertColumn(coord_column)] == 'H')
+        {
+            coord_row = rand()%10;
+            Column_num = rand()%10;
+            coord_column = Define_name_column_by_num(Column_num);
+        }
+        else
+            retry = false;
+    }
 }

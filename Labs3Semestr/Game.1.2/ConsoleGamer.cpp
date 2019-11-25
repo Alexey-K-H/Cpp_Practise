@@ -37,10 +37,10 @@ void ConsoleGamer::PrintBoard() {
     std::cout << "\t\t<YOUR BOARD>" << std::endl;
     std::cout << "   [A][B][C][D][E][F][G][H][I][J]\n";
 
-    for(int x = 0; x < rows; x++)
+    for(int x = 0; x < ROWS; x++)
     {
         std::cout << "[" <<  x << "]";
-        for(int y = 0; y < columns; y++)
+        for(int y = 0; y < COLUMNS; y++)
         {
             std::cout << " " << gameBoard[x][y] << " ";
         }
@@ -269,13 +269,28 @@ void ConsoleGamer::Add_ships(int number_of_ships) {
     }
 }
 
-
 //Ход игрока, за которого играет пользователь
 void ConsoleGamer::Choose_coordinates_for_attack(int &coord_row, char &coord_column) {
-    std::cout << "PLAYER1 Which column will you fire at?(A-J):";
+    std::cout << "Which column will you fire at?(A-J):";
     Column_coordinate(coord_column);
-    std::cout << "PLAYER1 Which row you will fire at?(0-9):";
+    std::cout << "Which row you will fire at?(0-9):";
     Row_coordinate(coord_row);
+    bool retry = true;
+    while (retry)
+    {
+        if(attackBoard[coord_row][ConvertColumn(coord_column)] == '#' ||
+           attackBoard[coord_row][ConvertColumn(coord_column)] == 'X' ||
+           attackBoard[coord_row][ConvertColumn(coord_column)] == 'H')
+        {
+            std::cout << "YOU HAVE ALREADY PRINT THIS COORDINATES! PLEASE PRINT ANOTHER!\n";
+            std::cout << "Which column will you fire at?(A-J):";
+            Column_coordinate(coord_column);
+            std::cout << "Which row you will fire at?(0-9):";
+            Row_coordinate(coord_row);
+        }
+        else
+            retry = false;
+    }
 }
 
 

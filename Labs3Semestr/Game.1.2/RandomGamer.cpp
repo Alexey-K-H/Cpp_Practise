@@ -95,4 +95,19 @@ void RandomGamer::Choose_coordinates_for_attack(int &coord_row, char &coord_colu
     coord_row = rand()%10;
     int Column_num = rand()%10;
     coord_column = Define_name_column_by_num(Column_num);
+
+    bool retry = true;
+    while (retry)
+    {
+        if(attackBoard[coord_row][ConvertColumn(coord_column)] == '#' ||
+           attackBoard[coord_row][ConvertColumn(coord_column)] == 'X' ||
+           attackBoard[coord_row][ConvertColumn(coord_column)] == 'H')
+        {
+            coord_row = rand()%10;
+            Column_num = rand()%10;
+            coord_column = Define_name_column_by_num(Column_num);
+        }
+        else
+            retry = false;
+    }
 }
