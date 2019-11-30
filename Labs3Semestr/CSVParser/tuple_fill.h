@@ -15,10 +15,11 @@ template<typename T> T from_string(const std::string &str, int N, int curr_row)
     ss << str;
     T t;
     ss >> t;
-    
+
     if(ss.fail()){
         throw type_mismatch("Type mismatch, problems in position", N, curr_row);
     }
+
     return t;
 }
 
@@ -27,7 +28,7 @@ template<> std::string from_string(const std::string &str, int N, int curr_row)
     return str;
 }
 
-//Заполнение последовательности N - индекс элемента последовательности (0 < N < Size(Argc))
+
 template <typename Tuple, unsigned N, unsigned Size>
 struct fillTuple{
     static void fill(Tuple &tuple, const std::vector<std::string> &vector, int curr_row){
@@ -42,7 +43,7 @@ struct fillTuple{
     }
 };
 
-//Случай когда N = Size(дошли до конца)
+
 template <typename Tuple, unsigned N>
 struct fillTuple<Tuple, N, N>{
     static void fill(Tuple &tuple, const std::vector<std::string> &vector, int curr_row){
@@ -50,7 +51,7 @@ struct fillTuple<Tuple, N, N>{
     }
 };
 
-//Слуйчай если размер последовательности равен 0
+
 template <typename Tuple, unsigned N>
 struct fillTuple<Tuple, N, 0>{
     static void fill(Tuple &tuple, const std::vector<std::string> &vector, int curr_row){}
@@ -59,12 +60,7 @@ struct fillTuple<Tuple, N, 0>{
 //Создание последовательности из данных CSV файла
 template <typename...Argc>
 void makeTuple(std::tuple<Argc...> &arg, std::vector<std::string> &vector_of_str, int curr_row){
-    try {
-        fillTuple<std::tuple<Argc...>, 0, sizeof...(Argc) - 1>::fill(arg, vector_of_str, curr_row);
-    }
-    catch (type_mismatch &err){
-        throw err;
-    }
+    fillTuple<std::tuple<Argc...>, 0, sizeof...(Argc) - 1>::fill(arg, vector_of_str, curr_row);
 }
 
 #endif

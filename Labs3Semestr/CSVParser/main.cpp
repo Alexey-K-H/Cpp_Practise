@@ -3,19 +3,17 @@
 #include "csv_parser.h"
 #include "tuple_print.h"
 
-int main() {
-
-    std::ifstream inputFile("test.csv");
-    if (!inputFile.is_open()) {
-        std::cerr << "File can't be open!\n";
-        return 0;
-    }
-
+int main()
+{
+    std::string input_file_name = "test.csv";
     try {
-        CSV_parser<int, std::string> parser(&inputFile);
+        CSV_parser<int, std::string> parser(input_file_name);
         for(std::tuple<int, std::string> rs : parser){
             std::cout << rs << std::endl;
         }
+    }
+    catch (std::invalid_argument &err){
+        std::cerr << err.what() << std::endl;
     }
     catch (parser_exception &exception)
     {

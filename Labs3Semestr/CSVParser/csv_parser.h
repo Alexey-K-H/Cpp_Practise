@@ -4,7 +4,6 @@
 #include "parser_error.h"
 #include "tuple_fill.h"
 #include "tuple_print.h"
-#include "csv_iterator.h"
 
 #include <vector>
 #include <sstream>
@@ -36,45 +35,93 @@ std::vector<std::string> divideString(std::string &str, char column_delimiter){
     return result;
 }
 
+
 template <typename ... Args>
 class CSV_parser{
 private:
-    std::ifstream *input;
-    std::vector<std::tuple<Args...>> tuple_vector;
+    std::string input_file_name;
+    int count_of_str = 0;//Количество строк в файле
+    char delimiter;
 public:
-    CSV_parser(std::ifstream *in, char character = ';'): input(in){
-        int curr_row = 0;
-        std::string curr_str;
-        std::vector<std::string> vector_of_str;
-        std::tuple<Args...> tuple;
-
-        //Идём по файлу
-        while (std::getline(*input, curr_str)){
-            vector_of_str = divideString(curr_str, character);
-
-            if(vector_of_str.size() != sizeof...(Args))
-                throw parser_exception("Invalid number of parameters per line\n");
-
-            try {
-                makeTuple<Args...>(tuple, vector_of_str, curr_row);
-                tuple_vector.push_back(tuple);
-            }
-            catch (type_mismatch &err){
-                throw err;
-            }
-
-            curr_row++;
+    CSV_parser(std::string name, char character = ';'): input_file_name(name), delimiter(character){
+        //Проверка существоания файла
+        std::ifstream in;
+        in.open(input_file_name);
+        if(!in.is_open()){
+            throw std::invalid_argument("File can't be open!");
         }
+        //Счиатем количество строк файла
+        std::string str;
+        while (std::getline(in, str)){
+            count_of_str++;
+        }
+
+        in.close();
     }
 
-    CSVIterator<Args...>begin()const{
-        return CSVIterator<Args...>(tuple_vector, 0);
+    class CSVIterator{
+    private:
+        std::string name;
+        size_t index;
+        char delimiter;
+
+    public:
+        CSVIterator(const std::string name_of_input, size_t ind, char character){
+            index = ind;
+            name = name_of_input;
+            delimiter = character;
+        }
+
+        CSVIterator &operator++(){
+            index++;
+            return *this;
+        }
+
+        std::tuple<Args...> operator*() const {
+            //Открываем файл
+            std::ifstream in;
+            in.open(name);
+
+            //Переходим к строке файла с номером ind
+            int curr_row = -1;
+            std::string curr_str;
+            std::vector<std::string> vector_of_str;
+            std::tuple<Args...> tuple;
+
+
+            while(std::getline(in, curr_str)){
+                curr_row++;
+                if(curr_row == index){
+                    vector_of_str = divideString(curr_str, delimiter);
+                    if(vector_of_str.size() != sizeof...(Args))
+                        throw parser_exception("Invalid number of parameters per line\n");
+
+                    makeTuple<Args...>(tuple, vector_of_str, curr_row);
+                    break;
+                }
+            }
+
+            in.close();
+            return tuple;
+        }
+
+        friend bool operator== (const CSVIterator & first, const CSVIterator& second)
+        {
+            return (first.index == second.index);
+        }
+
+        friend bool operator!= (const CSVIterator &first, const CSVIterator &second){
+            return !(first == second);
+        }
+    };
+
+    CSVIterator begin()const{
+        return CSVIterator(input_file_name, 0, delimiter);
     }
 
-    CSVIterator<Args...>end()const{
-        return CSVIterator<Args...>(tuple_vector, tuple_vector.size());
+    CSVIterator end()const{
+        return CSVIterator(input_file_name, count_of_str, delimiter);
     }
 };
-
 
 #endif
