@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <complex>
 #include "csv_parser.h"
 #include "tuple_print.h"
 
@@ -7,8 +7,8 @@ int main()
 {
     std::string input_file_name = "test.csv";
     try {
-        CSV_parser<int, std::string> parser(input_file_name);
-        for(std::tuple<int, std::string> rs : parser){
+        CSV_parser<std::complex<float>, std::string> parser(input_file_name);
+        for(auto rs : parser){
             std::cout << rs << std::endl;
         }
     }

@@ -33,7 +33,7 @@ template <typename Tuple, unsigned N, unsigned Size>
 struct fillTuple{
     static void fill(Tuple &tuple, const std::vector<std::string> &vector, int curr_row){
         try {
-            std::get<N>(tuple) = from_string<int>(vector[N], N, curr_row);
+            std::get<N>(tuple) = from_string<typename std::tuple_element<N,Tuple>::type>(vector[N], N, curr_row);
             //Проверяем следующий шаг
             fillTuple<Tuple, N + 1, Size>::fill(tuple, vector, curr_row);
         }
@@ -43,14 +43,12 @@ struct fillTuple{
     }
 };
 
-
 template <typename Tuple, unsigned N>
 struct fillTuple<Tuple, N, N>{
     static void fill(Tuple &tuple, const std::vector<std::string> &vector, int curr_row){
-        std::get<N>(tuple) = from_string<std::string>(vector[N], N, curr_row);
+        std::get<N>(tuple) = from_string<typename std::tuple_element<N,Tuple>::type>(vector[N], N, curr_row);
     }
 };
-
 
 template <typename Tuple, unsigned N>
 struct fillTuple<Tuple, N, 0>{

@@ -40,69 +40,89 @@ template <typename ... Args>
 class CSV_parser{
 private:
     std::string input_file_name;
-    int count_of_str = 0;//Количество строк в файле
     char delimiter;
 public:
     CSV_parser(std::string name, char character = ';'): input_file_name(name), delimiter(character){
-        //Проверка существоания файла
+        //Проверка существования файла
         std::ifstream in;
         in.open(input_file_name);
         if(!in.is_open()){
             throw std::invalid_argument("File can't be open!");
         }
-        //Счиатем количество строк файла
-        std::string str;
-        while (std::getline(in, str)){
-            count_of_str++;
-        }
-
         in.close();
     }
 
     class CSVIterator{
     private:
-        std::string name;
+        std::ifstream file;
         size_t index;
         char delimiter;
-
+        std::tuple<Args...> tuple;
+        std::string name;
     public:
         CSVIterator(const std::string name_of_input, size_t ind, char character){
             index = ind;
-            name = name_of_input;
             delimiter = character;
+            name = name_of_input;
+            file.open(name_of_input);
+
+            int curr_row = -1;
+            std::string curr_str;
+            std::vector<std::string> vector_of_str;
+            std::tuple<Args...> curr_tuple;
+
+            if(index >= 0)
+            {
+                while(std::getline(file, curr_str)){
+                    curr_row++;
+                    if(curr_row == index){
+                        vector_of_str = divideString(curr_str, delimiter);
+                        if(vector_of_str.size() != sizeof...(Args))
+                            throw parser_exception("Invalid number of parameters per line");
+
+                        makeTuple<Args...>(curr_tuple, vector_of_str, curr_row);
+                        tuple = curr_tuple;
+                        break;
+                    }
+                }
+
+                if(curr_row == -1){
+                    index = -1;
+                }
+            }
+
         }
 
         CSVIterator &operator++(){
             index++;
+
+            std::string curr_str;
+            std::vector<std::string> vector_of_str;
+            std::tuple<Args...> curr_tuple;
+
+            if(std::getline(file, curr_str)){
+                vector_of_str = divideString(curr_str, delimiter);
+                if(vector_of_str.size() != sizeof...(Args))
+                    throw parser_exception("Invalid number of parameters per line");
+
+                makeTuple<Args...>(curr_tuple, vector_of_str, index);
+                tuple = curr_tuple;
+            } else
+            {
+                index = -1;
+                file.close();
+            }
+
             return *this;
         }
 
+
         std::tuple<Args...> operator*() const {
-            //Открываем файл
-            std::ifstream in;
-            in.open(name);
-
-            //Переходим к строке файла с номером ind
-            int curr_row = -1;
-            std::string curr_str;
-            std::vector<std::string> vector_of_str;
-            std::tuple<Args...> tuple;
-
-
-            while(std::getline(in, curr_str)){
-                curr_row++;
-                if(curr_row == index){
-                    vector_of_str = divideString(curr_str, delimiter);
-                    if(vector_of_str.size() != sizeof...(Args))
-                        throw parser_exception("Invalid number of parameters per line\n");
-
-                    makeTuple<Args...>(tuple, vector_of_str, curr_row);
-                    break;
-                }
-            }
-
-            in.close();
             return tuple;
+        }
+
+        std::tuple<Args...>* operator->() const {
+            return &tuple;
         }
 
         friend bool operator== (const CSVIterator & first, const CSVIterator& second)
@@ -120,7 +140,7 @@ public:
     }
 
     CSVIterator end()const{
-        return CSVIterator(input_file_name, count_of_str, delimiter);
+        return CSVIterator(input_file_name, -1, delimiter);
     }
 };
 
